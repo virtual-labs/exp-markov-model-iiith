@@ -13,6 +13,3 @@ Assigning part of speech to words by hand is a common exercise one can find in a
 In this experiment we will explore how such a model can be learned from the data.
 
 
-### Objective
-
-The objective of the experiment is to calculate emission and transition matrix which will be helpful for tagging Parts of Speech using Hidden Markov Model.

@@ -63,8 +63,8 @@ function calculator($str){
 
 $flag_chk_emission=1;
 $flag_chk_transmission=1;
-$emission = explode(",", $_GET['emission']);
-$transmission = explode(",", $_GET['transmission']);
+$emission = explode(",", (string) $_GET['emission']);
+$transmission = explode(",", (string) $_GET['transmission']);
 $flag=1;
 if($_GET['emission']=="%")
 	$flag=0;
@@ -74,10 +74,10 @@ $corpus=$_GET['corpus'];
 $fp=fopen("./Exp4/corpus/".$corpus,"r");
 $cnt=0;
 $cnt1=0;
-$words=array();
-$pos=array();
-$emission_matrix=array();
-$transmission_matrix=array();
+$words=[];
+$pos=[];
+$emission_matrix=[];
+$transmission_matrix=[];
 array_push($pos,"eos");
 while(!feof($fp))
 {
@@ -139,7 +139,7 @@ echo "<table style=\"background-color:#FFD4A8; padding:0px; margin:0px\">
 				$prob1_f=calculator($prob1);
 				$prob2_f=calculator($prob2);
 				}
-				catch(Exception $e){
+				catch(Exception){
 				echo ";background-color:#FF0000";
 				$flag_chk_emission=0;}
 				$prob1_f=(string)round($prob1_f,2);
@@ -158,9 +158,9 @@ echo "<table style=\"background-color:#FFD4A8; padding:0px; margin:0px\">
 			else
 			{
 				$temp=1;
-				if (preg_match("/[^0-9\ \.\(\)\+\-\*\/]/",$prob1)==1)
+				if (preg_match("/[^0-9\ \.\(\)\+\-\*\/]/",(string) $prob1)==1)
 					$temp=0;
-				if ($temp==0 or strlen($prob1)==0)
+				if ($temp==0 or strlen((string) $prob1)==0)
 					echo $prob1."'";
 				else
 					echo $prob1_f."'";
@@ -208,7 +208,7 @@ echo "<table width=\"100%\" style=\"padding:0px; margin:0px\">
 				$prob1_f=calculator($prob1);
 				$prob2_f=calculator($prob2);
 				}
-				catch(Exception $e){
+				catch(Exception){
 				echo ";background-color:#FF0000";
 				$flag_chk_transmission=0;}
 				$prob1_f=(string)round($prob1_f,2);
@@ -227,9 +227,9 @@ echo "<table width=\"100%\" style=\"padding:0px; margin:0px\">
 			else
 			{
 				$temp=1;
-				if (preg_match("/[^0-9\ \.\(\)\+\-\*\/]/",$prob1)==1)
+				if (preg_match("/[^0-9\ \.\(\)\+\-\*\/]/",(string) $prob1)==1)
 					$temp=0;
-				if ($temp==0 or strlen($prob1)==0)
+				if ($temp==0 or strlen((string) $prob1)==0)
 					echo $prob1."'";
 				else
 					echo $prob1_f."'";

@@ -1,13 +1,4 @@
-/* main.css: Adapted from Viterbi experiment for Markov Model */
-html {
-  box-sizing: border-box;
-  font-size: 12px;
-}
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
+/* main.css: Modern responsive design for Markov Model experiment */
 :root {
   --color-primary: #4361ee;
   --color-primary-light: #4895ef;
@@ -18,6 +9,8 @@ html {
   --color-accent: #f72585;
   --color-accent-light: #ff8fab;
   --color-accent-dark: #b5179e;
+  --color-success: #4caf50;
+  --color-error: #f44336;
   --color-neutral-50: #f8fafc;
   --color-neutral-100: #f1f5f9;
   --color-neutral-200: #e2e8f0;
@@ -35,172 +28,247 @@ html {
   --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
     0 4px 6px -2px rgba(67, 97, 238, 0.05);
 }
-body {
-  background: var(--color-neutral-50);
-  color: var(--color-neutral-800);
-  font-family: "Roboto", Arial, sans-serif;
-  font-size: 1rem;
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  font-size: 0.97em;
   min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
 }
-.simulation-flex-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: 1100px;
+
+.container {
+  width: 90vw;
+  max-width: 1400px;
   margin: 0 auto;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-}
-@media (min-width: 900px) {
-  .simulation-flex-container {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 2.5em;
-  }
-}
-.sim-col1,
-.sim-col2 {
-  flex: 1 1 0;
-  min-width: 340px;
-  max-width: 520px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  margin-top: 2.5em;
-}
-.sim-col1 {
-  margin-right: 1.5em;
-}
-.sim-col2 {
-  margin-left: 1.5em;
-  justify-content: flex-start;
-}
-.simulation-step {
-  background: #fff;
-  box-shadow: var(--shadow-md);
-  border-radius: var(--radius-lg);
-  padding: 0.2em 1.2em 0.2em 1.2em;
-  margin-bottom: 1em;
-  max-width: 100%;
-  text-align: center;
-  transition: box-shadow 0.2s;
-  border: 1px solid var(--color-neutral-200);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
-.simulation-step .step-heading {
-  font-size: 1.19em;
+
+.main-content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Instructions Panel */
+#instructions-bar {
+  width: 100%;
+  max-width: 1040px;
+  margin: 1.5rem auto;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  padding: 1rem 2rem;
+  border: 1px solid var(--color-neutral-200);
+}
+
+#instructions-bar:hover {
+  background: linear-gradient(90deg, #72efdd 0%, #4895ef 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.instructions-label {
   font-weight: 700;
   color: var(--color-primary-dark);
-  margin-bottom: 0.1em;
-  margin-top: 0;
+  font-size: 1.2em;
+  letter-spacing: 0.01em;
+  text-align: center;
+  flex: 1;
+}
+
+.arrow-icon {
+  position: absolute;
+  right: 2rem;
+  font-size: 1.2em;
+  color: var(--color-primary-dark);
+  transition: transform 0.2s ease;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+#instructions-content {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto 2rem auto;
+  background: #fff;
+  border: 1px solid var(--color-neutral-200);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-md);
+  display: none;
+}
+
+#instructions-content ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+#instructions-content li {
+  margin-bottom: 0.8rem;
+  color: var(--color-neutral-800);
+}
+
+/* Main Layout - Default Desktop (>900px) */
+#main-2pane-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Left pane - corpus selection and info */
+#left-pane {
+  flex: 0 0 30%;
+  max-width: 400px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Right pane - matrices and controls */
+#right-pane {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Pane Sections */
+#corpus-selection,
+#corpus-info {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.markov-matrices-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  width: fit-content;
+  min-width: 100%;
+}
+
+.markov-feedback-section,
+.markov-answers-section {
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  display: none;
+}
+
+.markov-feedback-section.visible,
+.markov-answers-section.visible {
+  display: block;
+}
+
+/* Section Titles */
+.markov-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
   letter-spacing: 0.01em;
 }
-.simulation-step .explanation {
-  margin-bottom: 0.4em;
-  width: 100%;
-  font-size: 1em;
-  text-align: left;
-}
-.simulation-step select,
-.simulation-step input[type="text"],
-select,
-input[type="text"] {
-  display: block;
-  margin: 0.4em auto 0.4em auto;
-  width: 90%;
-  min-width: 120px;
-  max-width: 320px;
-  box-sizing: border-box;
-  background: var(--color-neutral-100);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-md);
-  font-size: 1.15rem;
-  color: var(--color-neutral-800);
-  padding: 0.5em 0.8em;
-  transition: border-color 0.2s;
-}
-.simulation-step select:focus,
-.simulation-step input[type="text"]:focus,
-select:focus,
-input[type="text"]:focus {
-  border-color: var(--color-primary);
-  outline: none;
-}
 
-/* Enhanced dropdown styling for Markov model - matching Viterbi */
-#corpus-selection select,
-#right-pane-content select,
-.corpus-dropdown,
+/* Dropdowns */
+select,
 .markov-dropdown {
+  width: 100%;
   background: var(--color-neutral-100);
-  border: 2px solid var(--color-primary-light);
+  border: 2px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
   color: var(--color-neutral-800);
-  padding: 0.6em 1em;
-  font-size: 1.1em;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
   font-weight: 500;
-  width: 100%;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
   box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem 1.5rem;
+  padding-right: 2.5rem;
 }
 
-#corpus-selection select:hover,
-#right-pane-content select:hover,
-.corpus-dropdown:hover,
+select:hover,
 .markov-dropdown:hover {
   border-color: var(--color-primary);
   box-shadow: var(--shadow-lg);
 }
 
-/* Additional dropdown styling to match Viterbi exactly */
-select {
-  padding: 0.3em 0.7em;
-  font-size: 1em;
-  margin: 0.2em 0.5em 0.2em 0;
-  border-radius: 4px;
-  border: 1px solid #aaa;
+select:focus,
+.markov-dropdown:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
 }
 
-/* Readonly input styling from Viterbi */
-input[readonly] {
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  color: #333;
-  padding: 0.3em 0.7em;
-  margin: 0.2em 0.5em 0.2em 0;
-  border-radius: 4px;
-}
-
-/* Enhanced table styling with better overflow handling */
+/* Tables */
 .markov-table,
 .emission-matrix-table,
 .transition-matrix-table {
-  width: 100%;
-  max-width: 100%;
+  width: auto;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 1rem 0;
   background: #fff;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  border: 2px solid var(--color-primary-light);
+  border: 1px solid var(--color-neutral-200);
   table-layout: auto;
 }
 
-/* Table container to handle overflow */
 .markov-table-container {
-  overflow-x: auto;
-  margin: 1em 0;
+  margin: 1rem 0;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
+  -webkit-overflow-scrolling: touch;
+  width: fit-content;
+  overflow-x: visible;
+  display: inline-block;
 }
 
 .markov-table th,
@@ -208,24 +276,23 @@ input[readonly] {
 .transition-matrix-table th {
   background: var(--color-primary);
   color: #fff;
-  padding: 0.8em 0.6em;
+  padding: 1rem 0.75rem;
   font-weight: 600;
   text-align: center;
   border: 1px solid var(--color-primary-dark);
   white-space: nowrap;
-  min-width: 60px;
+  min-width: 80px;
 }
 
 .markov-table td,
 .emission-matrix-table td,
 .transition-matrix-table td {
-  padding: 0.6em 0.4em;
+  padding: 0.75rem 0.5rem;
   text-align: center;
   border: 1px solid var(--color-neutral-200);
   background: var(--color-neutral-50);
   transition: background-color 0.2s;
-  min-width: 60px;
-  white-space: nowrap;
+  min-width: 80px;
 }
 
 .markov-table td:hover,
@@ -234,23 +301,557 @@ input[readonly] {
   background: var(--color-neutral-100);
 }
 
-/* Markov-specific CSS classes matching new 2-pane structure */
-
-/* Table input styling with proper scoping and sizing */
+/* Table Inputs */
 .markov-table input[type="text"],
 .emission-matrix-table input[type="text"],
 .transition-matrix-table input[type="text"] {
-  width: 90%;
-  min-width: 50px;
-  max-width: 80px;
+  width: 100%;
+  max-width: 120px;
   margin: 0;
   text-align: center;
   background: #fff;
-  border: 1px solid var(--color-neutral-300);
-  border-radius: 4px;
-  padding: 0.3em 0.2em;
-  transition: border-color 0.2s, background-color 0.2s;
-  font-size: 0.9em;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.25rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.markov-table input[type="text"]:focus,
+.emission-matrix-table input[type="text"]:focus,
+.transition-matrix-table input[type="text"]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+.markov-table input[type="text"]:hover,
+.emission-matrix-table input[type="text"]:hover,
+.transition-matrix-table input[type="text"]:hover {
+  border-color: var(--color-primary-light);
+}
+
+/* Buttons */
+.markov-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.markov-controls button,
+button {
+  border: none;
+  border-radius: 2.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  margin: 0.2rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.primary-button,
+button[type="submit"],
+.markov-controls button:first-child {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 60%,
+    var(--color-secondary) 100%
+  );
+  color: #fff;
+}
+
+.primary-button:hover,
+button[type="submit"]:hover,
+.markov-controls button:first-child:hover {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.secondary-button,
+button[type="button"],
+.markov-controls button:not(:first-child) {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 60%,
+    var(--color-accent-light) 100%
+  );
+  color: #fff;
+}
+
+.secondary-button:hover,
+button[type="button"]:hover,
+.markov-controls button:not(:first-child):hover {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Feedback and Messages */
+.markov-feedback,
+.feedback-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+  font-weight: 500;
+}
+
+.feedback-success {
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.feedback-error {
+  background: rgba(244, 67, 54, 0.1);
+  border-left-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.feedback-info {
+  background: rgba(67, 97, 238, 0.1);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mt-1 {
+  margin-top: 1rem;
+}
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+
+/* Highlight Classes */
+.highlight-correct {
+  border-color: var(--color-success) !important;
+  background: rgba(76, 175, 80, 0.1) !important;
+}
+
+.highlight-incorrect {
+  border-color: var(--color-error) !important;
+  background: rgba(244, 67, 54, 0.1) !important;
+}
+
+/* Responsive Design */
+/* Desktop optimizations (>900px) */
+@media (min-width: 900px) {
+  .main-content {
+    max-width: 1400px;
+    padding: 0 2rem;
+  }
+
+  #instructions-bar,
+  #instructions-content {
+    max-width: 1200px;
+  }
+
+  #main-2pane-container {
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+}
+
+/* Tablet responsive design (≤900px) */
+@media (max-width: 900px) {
+  .container {
+    width: 95vw;
+  }
+
+  .main-content {
+    padding: 0 1rem;
+  }
+
+  #instructions-bar {
+    padding: 0.8rem 1.5rem;
+    margin: 1rem auto;
+  }
+
+  .instructions-label {
+    font-size: 1.1em;
+  }
+
+  .arrow-icon {
+    right: 1.5rem;
+    font-size: 1.1em;
+  }
+
+  #instructions-content {
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Single column layout */
+  #main-2pane-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  #left-pane {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    order: 1;
+  }
+
+  #right-pane {
+    flex: none;
+    width: 100%;
+    order: 2;
+  }
+
+  /* Adjust section padding */
+  #corpus-selection,
+  #corpus-info,
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 1.2rem;
+  }
+
+  /* Reset markov-matrices-section to full width on tablet */
+  .markov-matrices-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Table scrolling */
+  .markov-table-container {
+    position: relative;
+    overflow-x: auto;
+    width: 100%;
+    display: block;
+  }
+
+  /* Matrix containers need horizontal scrolling on tablet */
+  .emission-matrix-container,
+  .transition-matrix-container {
+    overflow-x: auto;
+    width: 100%;
+    display: block;
+  }
+
+  /* Tables need full width on tablet */
+  .markov-table,
+  .emission-matrix-table,
+  .transition-matrix-table {
+    width: 100%;
+  }
+
+  .markov-table-container::after {
+    content: "← Scroll to see more →";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--color-neutral-500);
+    opacity: 0.7;
+  }
+
+  .emission-matrix-table,
+  .transition-matrix-table {
+    min-width: 600px;
+  }
+
+  /* Touch-friendly buttons */
+  .markov-controls button,
+  button {
+    min-height: 48px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  /* Responsive form elements */
+  select,
+  .markov-dropdown {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.8rem 1rem;
+    padding-right: 2.5rem;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    font-size: 16px;
+    padding: 0.6rem 0.3rem;
+  }
+}
+
+/* Mobile responsive design (≤600px) */
+@media (max-width: 600px) {
+  .container {
+    width: 98vw;
+  }
+
+  .main-content {
+    padding: 0 0.5rem;
+  }
+
+  #instructions-bar {
+    padding: 0.6rem 1rem;
+    margin: 0.8rem auto;
+  }
+
+  .instructions-label {
+    font-size: 1rem;
+  }
+
+  .arrow-icon {
+    right: 1rem;
+    font-size: 1rem;
+  }
+
+  #instructions-content {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  #instructions-content ol {
+    padding-left: 1.2rem;
+  }
+
+  #instructions-content li {
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  /* Compact layout */
+  #main-2pane-container {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Compact sections */
+  #corpus-selection,
+  #corpus-info,
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 1rem;
+  }
+
+  .markov-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Table adjustments */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    font-size: 0.85rem;
+    min-width: 500px;
+  }
+
+  .markov-table th,
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .markov-table td,
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 0.5rem 0.3rem;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    width: 100%;
+    max-width: 80px;
+    font-size: 14px;
+    padding: 0.4rem 0.2rem;
+  }
+
+  /* Button layout */
+  .markov-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .markov-controls button,
+  button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+  }
+
+  /* Compact form elements */
+  select,
+  .markov-dropdown {
+    font-size: 16px;
+    padding: 0.7rem 0.8rem;
+    padding-right: 2.2rem;
+  }
+}
+
+/* Small mobile responsive design (≤480px) */
+@media (max-width: 480px) {
+  .container {
+    width: 100vw;
+  }
+
+  .main-content {
+    padding: 0 0.3rem;
+  }
+
+  #instructions-bar {
+    padding: 0.5rem 0.8rem;
+    margin: 0.5rem auto;
+    border-radius: 0.5rem;
+  }
+
+  .instructions-label {
+    font-size: 0.9rem;
+  }
+
+  .arrow-icon {
+    right: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  #instructions-content {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+  }
+
+  #instructions-content li {
+    font-size: 0.85rem;
+  }
+
+  /* Very compact layout */
+  #main-2pane-container {
+    gap: 0.8rem;
+    padding: 0 0.3rem;
+  }
+
+  /* Very compact sections */
+  #corpus-selection,
+  #corpus-info,
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 0.8rem;
+  }
+
+  .markov-section-title {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  /* Very compact tables */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    font-size: 0.75rem;
+    min-width: 450px;
+  }
+
+  .markov-table th,
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.7rem;
+  }
+
+  .markov-table td,
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 0.3rem 0.15rem;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    max-width: 60px;
+    font-size: 13px;
+    padding: 0.3rem 0.15rem;
+  }
+
+  /* Stack buttons in pairs */
+  .markov-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .markov-controls button,
+  button {
+    flex: 1 1 calc(50% - 0.2rem);
+    min-width: 0;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.5rem;
+  }
+
+  /* Very compact form elements */
+  select,
+  .markov-dropdown {
+    font-size: 14px;
+    padding: 0.6rem 0.7rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  #left-pane {
+    flex: 0 0 35%;
+    max-width: 300px;
+  }
+
+  #right-pane {
+    flex: 1;
+  }
+
+  .markov-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .markov-controls button {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 100px;
+  }
 }
 
 .markov-table input[type="text"]:focus,
@@ -261,9 +862,55 @@ input[readonly] {
   outline: none;
 }
 
-/* Remove the old fallback table styling to prevent conflicts */
+/* Matrix containers */
+.emission-matrix-container,
+.transition-matrix-container {
+  background: var(--color-neutral-50);
+  margin: 16px 0;
+  border-radius: var(--radius-lg);
+  padding: 1.5em;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  width: fit-content;
+  overflow-x: visible;
+  display: inline-block;
+}
 
-/* Message styling for feedback */
+.emission-matrix-container .markov-section-title,
+.transition-matrix-container .markov-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+/* Buttons */
+button {
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5em;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: #ccc;
+  transform: none;
+}
+
+/* Message styling */
 .feedback-message,
 .success-message,
 .error-message,
@@ -304,420 +951,7 @@ input[readonly] {
   border-left: 4px solid #ff9800;
 }
 
-#step-accuracy {
-  grid-column: 1 / span 2;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-@media (max-width: 900px) {
-  .simulation-flex-container {
-    flex-direction: column;
-    gap: 1.2em;
-  }
-  .sim-col1,
-  .sim-col2 {
-    max-width: 95%;
-    margin: 0;
-  }
-  #result-panel {
-    min-height: 180px;
-    padding: 1.2em 1em 1em 1em;
-  }
-  .container-fluid {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-#reset-container {
-  text-align: center;
-  margin-top: 0.1em;
-}
-#result-panel {
-  background: #fff;
-  border: 2px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  min-height: 0;
-  min-width: 0;
-  padding: 0.7em 0.7em 0.7em 0.7em;
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  flex-grow: 1;
-}
-.result-heading {
-  color: var(--color-primary-dark);
-  font-size: 1.8em;
-  font-weight: 700;
-  margin-top: 0.1em;
-  margin-bottom: 0.1em;
-  text-align: center;
-}
-#result-content {
-  width: 100%;
-  min-height: 120px;
-  text-align: left;
-  font-size: 1.5em;
-}
-.sim-button,
-button.sim-button,
-#check-btn,
-#hint-btn,
-#answer-btn,
-#reset-btn {
-  background: linear-gradient(
-    90deg,
-    var(--color-primary) 60%,
-    var(--color-secondary) 100%
-  );
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 0.6em 1.5em;
-  font-size: 1.5em;
-  margin-top: 1.5em;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, opacity 0.2s;
-  box-shadow: var(--shadow-md);
-  opacity: 1;
-  font-weight: 600;
-}
-
-.sim-button:hover,
-button.sim-button:hover,
-#check-btn:hover,
-#hint-btn:hover,
-#answer-btn:hover,
-#reset-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-lg);
-}
-
-.sim-button:disabled,
-.sim-button[disabled],
-button.sim-button:disabled,
-#check-btn:disabled,
-#hint-btn:disabled,
-#answer-btn:disabled,
-#reset-btn:disabled {
-  background: linear-gradient(90deg, #e0e7ef 60%, #d0f0f7 100%);
-  color: #b0b0b0;
-  cursor: not-allowed;
-  opacity: 0.7;
-  box-shadow: none;
-  transform: none;
-}
-
-/* Legacy button styling for compatibility - matching Viterbi */
-button {
-  padding: 0.4em 1.2em;
-  font-size: 1em;
-  background: #337ab7;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5em;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  background: var(--color-primary-dark);
-  transform: translateY(-1px);
-}
-
-button:disabled {
-  cursor: not-allowed;
-  background: #ccc;
-  transform: none;
-}
-
-/* Accuracy display */
-#accuracy_ans {
-  color: #2e7d32;
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-top: 1em;
-}
-
-/* Info text */
-div[style*="color:blue"] {
-  margin-bottom: 0.7em;
-  font-size: 1.08em;
-}
-
-.sim-sidebar {
-  background: var(--color-neutral-100);
-  border: 2px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 2em 1.5em 1.5em 1.5em;
-  margin-right: 2em;
-  min-width: 260px;
-  max-width: 320px;
-  font-size: 1.08em;
-  color: var(--color-primary-dark);
-  align-self: flex-start;
-}
-.sim-sidebar h2 {
-  font-size: 1.4em;
-  color: var(--color-primary-dark);
-  margin-top: 0;
-}
-.sim-sidebar ul {
-  margin: 0.7em 0 1.2em 1.2em;
-  padding: 0;
-}
-.sim-sidebar .pos-tag-legend {
-  margin-top: 1.5em;
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-md);
-  padding: 1em 1.2em;
-  border: 1px solid var(--color-neutral-200);
-}
-.sim-sidebar .pos-tag-legend h3 {
-  font-size: 1.1em;
-  margin-top: 0;
-  color: var(--color-primary);
-}
-.tag-sample {
-  display: inline-block;
-  background: var(--color-secondary-light);
-  color: var(--color-primary-dark);
-  border-radius: 0.4em;
-  padding: 0.1em 0.5em;
-  font-size: 0.98em;
-  font-weight: 600;
-  margin: 0 0.2em;
-  border: 1px solid var(--color-primary-light);
-}
-.sim-maincol {
-  flex: 1 1 0;
-  min-width: 340px;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-.step-explanation {
-  background: var(--color-secondary-light);
-  color: var(--color-primary-dark);
-  border-left: 4px solid var(--color-primary);
-  padding: 0.5em 1em;
-  margin-bottom: 0.7em;
-  border-radius: var(--radius-md);
-  font-size: 1.08em;
-  box-shadow: 0 1px 4px rgba(67, 97, 238, 0.04);
-  text-align: left;
-}
-
-/* Panel styling for left, middle, and right panes */
-#left-pane,
-#middle-pane,
-#right-pane {
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-neutral-200);
-}
-
-#left-pane h3,
-#middle-pane h3,
-#right-pane h3 {
-  color: var(--color-primary-dark);
-  font-size: 1.3em;
-  margin-top: 0;
-  margin-bottom: 1em;
-  font-weight: 600;
-}
-
-#example-pos-output {
-  background: var(--color-neutral-100);
-  border: 1.5px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  margin-top: 1.5em;
-  padding: 1.2em 1.5em;
-  font-size: 1.08em;
-  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.06);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.example-pos-sentence {
-  font-size: 1.15em;
-  margin-top: 0.7em;
-  color: var(--color-neutral-800);
-  word-break: break-word;
-}
-@media (max-width: 1100px) {
-  .simulation-flex-container.simulation-2col-grid {
-    flex-direction: column;
-  }
-  .sim-sidebar {
-    max-width: 100%;
-    margin-right: 1em;
-    margin-left: 1em;
-    margin-bottom: 2em;
-  }
-}
-
-/* 2-pane layout styling for Markov experiment */
-#main-2pane-container {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  min-height: 80vh;
-  margin: 35px auto;
-  max-width: 1400px;
-  padding: 0 20px;
-}
-
-/* Left pane - corpus selection and info (30% max width) */
-#left-pane {
-  flex: 0 0 30%;
-  max-width: 350px;
-  min-width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Right pane - all matrices and controls (70% width) */
-#right-pane {
-  flex: 1;
-  min-width: 0; /* Allow shrinking */
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-x: auto; /* Handle table overflow */
-}
-
-/* Responsive layout for mobile/tablet */
-@media (max-width: 900px) {
-  #main-2pane-container {
-    flex-direction: column;
-    gap: 16px;
-    margin: 20px auto;
-    padding: 0 10px;
-  }
-
-  #left-pane {
-    flex: none;
-    max-width: 100%;
-    min-width: auto;
-    order: 1;
-  }
-
-  #right-pane {
-    flex: none;
-    order: 2;
-  }
-}
-
-/* Left pane styling - corpus selection and info */
-#corpus-selection,
-#corpus-info {
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-neutral-200);
-}
-
-#corpus-selection .markov-section-title,
-#corpus-info .markov-section-title {
-  color: var(--color-primary-dark);
-  font-size: 1.2em;
-  margin-top: 0;
-  margin-bottom: 0.8em;
-  font-weight: 600;
-}
-
-/* Right pane content sections with improved styling */
-.markov-matrices-section {
-  background: #fff;
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
-  border: 2px solid var(--color-primary-light);
-}
-
-.markov-feedback-section {
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-lg);
-  padding: 1.2em;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-neutral-200);
-  min-height: 50px;
-}
-
-.markov-answers-section {
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-neutral-200);
-}
-
-/* Remove old 3-pane styling that's no longer needed */
-
-/* Interactive demo panel styling from Viterbi experiment */
-#interactive-demo-panel {
-  background: #fff;
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 1.5em 2em;
-  margin-top: 2.5em;
-  text-align: center;
-}
-
-#interactive-demo-panel h3 {
-  font-size: 1.5em;
-  color: var(--color-accent-dark);
-  margin-top: 0;
-  margin-bottom: 0.5em;
-}
-
-#interactive-demo-panel p {
-  font-size: 1.05em;
-  margin-bottom: 1em;
-}
-
-#demo-sentence-select,
-#result-demo-select {
-  width: 80%;
-  padding: 0.4em;
-  font-size: 1.05em;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-neutral-300);
-}
-
-#demo-sentence-output,
-#result-demo-output {
-  margin-top: 1.5em;
-  padding: 1em;
-  background: var(--color-neutral-100);
-  border-radius: var(--radius-md);
-  min-height: 50px;
-  text-align: left;
-}
-
-#result-demo-select {
-  margin-top: 1.5em;
-}
-
-#check-accuracy.sim-button {
-  /* Inherits all .sim-button styles - no additional styles needed */
-  margin: 1em auto;
-}
-
-/* Markov-specific CSS classes matching Viterbi structure */
+/* Markov-specific elements */
 .markov-section-title {
   font-size: 1.3em;
   font-weight: bold;
@@ -760,100 +994,476 @@ div[style*="color:blue"] {
   color: var(--color-primary-dark);
 }
 
-/* Containers properly styled */
-
-.emission-matrix-container .markov-section-title,
-.transition-matrix-container .markov-section-title {
-  color: var(--color-primary-dark);
-  font-size: 1.4em;
+/* Accuracy display */
+#accuracy_ans {
+  color: #2e7d32;
+  font-size: 1.2em;
   font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+/* Readonly input styling */
+input[readonly] {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 0.3em 0.7em;
+  margin: 0.2em 0.5em 0.2em 0;
+  border-radius: 4px;
+}
+
+/* Utility classes */
+.text-center {
   text-align: center;
 }
 
-.emission-matrix-container {
-  background: #fff8f0;
-  margin: 16px 0;
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
+.mb-1 {
+  margin-bottom: 1rem;
 }
 
-.transition-matrix-container {
-  background: #f0f8ff;
-  margin: 16px 0;
-  border-radius: var(--radius-lg);
-  padding: 1.5em;
-  box-shadow: var(--shadow-md);
+.mt-1 {
+  margin-top: 1rem;
 }
 
-/* Instructions bar styling - matches Viterbi experiment */
-#instructions-bar {
-  max-width: 900px;
-  margin: 20px auto;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 16px 24px;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow-sm);
+.hidden {
+  display: none;
 }
 
-#instructions-bar:hover {
-  background: var(--color-background-hover);
-  box-shadow: var(--shadow-md);
+.visible {
+  display: block;
 }
 
-#instructions-bar span:first-child {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  color: var(--color-primary);
-  font-size: 1.1em;
-}
+/* ===============================================
+   RESPONSIVE DESIGN - MOBILE/TABLET ONLY
+   Desktop layout (above 768px) remains unchanged
+   =============================================== */
 
-#instructions-arrow {
-  transition: transform 0.2s ease;
-}
+/* Tablet responsive design (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Switch to single column layout - left-pane at top, right-pane below */
+  #main-2pane-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+    margin: 0 auto;
+    max-width: none;
+    align-items: stretch;
+    width: 100%;
+  }
 
-#instructions-arrow.rotated {
-  transform: rotate(180deg);
-}
+  #left-pane {
+    flex: none;
+    width: 95%;
+    max-width: none;
+    min-width: auto;
+    order: 1;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
 
-#instructions-content {
-  max-width: 900px;
-  margin: 0 auto 24px auto;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-top: none;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: 20px 24px;
-  box-shadow: var(--shadow-sm);
-}
+  #right-pane {
+    flex: none;
+    width: 95%;
+    order: 2;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
 
-#instructions-content ol {
-  margin: 0;
-  padding-left: 20px;
-  line-height: 1.6;
-}
+  /* Compact section padding */
+  #corpus-selection,
+  #corpus-info {
+    padding: 1.2em;
+  }
 
-#instructions-content li {
-  margin-bottom: 8px;
-  color: var(--color-text);
-}
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 1.2em;
+  }
 
-/* Responsive instructions on mobile */
-@media (max-width: 900px) {
-  #instructions-bar,
+  /* Reset markov-matrices-section to full width on tablet */
+  .markov-matrices-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Add horizontal scrolling for tables */
+  .markov-table-container {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    width: 100%;
+    display: block;
+  }
+
+  /* Ensure scrollbars are visible for matrix containers */
+  .emission-matrix-container,
+  .transition-matrix-container {
+    overflow-x: auto;
+    width: 100%;
+    display: block;
+  }
+
+  /* Tables need full width on tablet */
+  .markov-table,
+  .emission-matrix-table,
+  .transition-matrix-table {
+    width: 100%;
+  }
+
+  /* Force scrollbar visibility for table containers */
+  .emission-matrix-container .markov-table-container,
+  .transition-matrix-container .markov-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Add scroll indicator */
+  .markov-table-container::after {
+    content: "← Scroll to see more columns →";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75em;
+    color: var(--color-neutral-500);
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  /* Ensure tables are scrollable */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    min-width: 700px;
+  }
+
+  /* Instructions bar responsive */
+  #instructions-bar {
+    margin: 15px auto;
+    padding: 12px 16px;
+    width: 95%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  #instructions-bar span:first-child {
+    font-size: 1em;
+  }
+
+  #instructions-arrow {
+    right: 16px;
+  }
+
   #instructions-content {
-    margin-left: 16px;
-    margin-right: 16px;
-    max-width: calc(100% - 32px);
+    margin: 0 auto 20px auto;
+    padding: 16px 20px;
+    width: 95%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  /* Dropdown improvements for touch */
+  #corpus-selection select,
+  .markov-dropdown {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.7em 1em;
+  }
+
+  /* Better touch targets */
+  button {
+    min-height: 44px;
+    padding: 0.8em 1.2em;
+  }
+
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    min-height: 44px;
+    padding: 0.8em 0.4em;
+  }
+
+  /* Enhanced focus for accessibility */
+  .emission-matrix-table input[type="text"]:focus,
+  .transition-matrix-table input[type="text"]:focus {
+    border-width: 2px;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+  }
+
+  /* Ensure dropdowns and content use full available width on tablets */
+  #corpus-selection select,
+  .markov-dropdown {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 0.7em 1em;
+  }
+
+  .markov-sentence {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    padding: 6px 8px;
+  }
+
+  .markov-section-title {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Mobile responsive design (max-width: 600px) */
+@media (max-width: 600px) {
+  html {
+    font-size: 11px;
+  }
+
+  #main-2pane-container {
+    gap: 12px;
+    padding: 0;
+    margin: 0 auto;
+    max-width: none;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  /* Maintain consistent width for both panes */
+  #left-pane {
+    width: 95%;
+    max-width: none;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  #right-pane {
+    width: 95%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* More compact sections */
+  #corpus-selection,
+  #corpus-info {
+    padding: 1em;
+  }
+
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 1em;
+  }
+
+  /* Smaller inputs in tables */
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    width: 45px;
+    min-width: 40px;
+    font-size: 0.85em;
+    padding: 0.25em;
+  }
+
+  /* Responsive button layout */
+  .markov-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .markov-controls button {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 100px;
+    padding: 0.6em 0.8em;
+    font-size: 0.9em;
+  }
+
+  /* Responsive section titles */
+  .markov-section-title {
+    font-size: 1.1em;
+  }
+
+  /* Minimum table width for mobile */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    min-width: 500px;
+  }
+
+  /* Ensure dropdowns and content use full available width on mobile */
+  #corpus-selection select,
+  .markov-dropdown {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 0.7em 1em;
+  }
+
+  .markov-sentence {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    padding: 6px 8px;
+  }
+
+  .markov-section-title {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Small mobile responsive design (max-width: 480px) */
+@media (max-width: 480px) {
+  html {
+    font-size: 10px;
+  }
+
+  #main-2pane-container {
+    gap: 10px;
+    padding: 0;
+    margin: 0 auto;
+    max-width: none;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  /* Maintain consistent width for both panes */
+  #left-pane {
+    width: 95%;
+    max-width: none;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  #right-pane {
+    width: 95%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* Very compact sections */
+  #corpus-selection,
+  #corpus-info {
+    padding: 0.6em;
+  }
+
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 0.6em;
+  }
+
+  /* Stack buttons vertically on very small screens */
+  .markov-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .markov-controls button {
+    flex: 1 1 calc(50% - 3px);
+    min-width: 80px;
+    max-width: calc(50% - 3px);
+    margin: 0;
+    padding: 0.5em 0.4em;
+    font-size: 0.85em;
+  }
+
+  /* Very small table inputs */
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    width: 35px;
+    min-width: 30px;
+    font-size: 0.8em;
+    padding: 0.2em;
+  }
+
+  /* Compact table styling */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    font-size: 0.85em;
+    min-width: 450px;
+  }
+
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 0.5em 0.3em;
+    font-size: 0.9em;
+  }
+
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 0.4em 0.2em;
+  }
+
+  /* Instructions bar responsive */
+  #instructions-bar {
+    margin: 10px auto;
+    padding: 10px 12px;
+    width: 95%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  #instructions-bar span:first-child {
+    font-size: 0.95em;
+  }
+
+  #instructions-arrow {
+    right: 12px;
+  }
+
+  #instructions-content {
+    margin: 0 auto 16px auto;
+    padding: 12px 16px;
+    width: 95%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  /* Responsive font scaling */
+  .markov-section-title {
+    font-size: 1em;
+  }
+
+  .markov-sentence {
+    font-size: 1em;
+  }
+
+  /* Ensure dropdowns and content use full available width on small mobile */
+  #corpus-selection select,
+  .markov-dropdown {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    padding: 0.5em 0.8em;
+  }
+
+  .markov-sentence {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  .markov-section-title {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Landscape orientation fixes for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  #left-pane {
+    flex: 0 0 40%;
+    max-width: 280px;
+    width: auto; /* Override the calc width for landscape */
+  }
+
+  #right-pane {
+    flex: 1;
+    width: auto; /* Override the calc width for landscape */
   }
 }

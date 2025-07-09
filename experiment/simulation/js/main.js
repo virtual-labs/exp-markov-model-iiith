@@ -143,8 +143,16 @@ function renderSimulation() {
   matricesContainer.innerHTML = html;
 
   // Clear feedback and answers sections
-  document.getElementById("markov-feedback").innerHTML = "";
-  document.getElementById("markov-answers").innerHTML = "";
+  const feedbackDiv = document.getElementById("markov-feedback");
+  const answersDiv = document.getElementById("markov-answers");
+  if (feedbackDiv) {
+    feedbackDiv.innerHTML = "";
+    feedbackDiv.style.display = "none"; // Hide feedback section
+  }
+  if (answersDiv) {
+    answersDiv.innerHTML = "";
+    answersDiv.style.display = "none"; // Hide answers section
+  }
   // Button handlers
   document.getElementById("check-btn").onclick = checkMatrices;
   document.getElementById("show-answer-btn").onclick = showAnswer;
@@ -265,7 +273,9 @@ function checkMatrices() {
     msg =
       '<div class="error-message">✗ Transition Matrix needs correction. Emission Matrix is correct.</div>';
   }
-  document.getElementById("markov-feedback").innerHTML = msg;
+  const feedbackDiv = document.getElementById("markov-feedback");
+  feedbackDiv.innerHTML = msg;
+  feedbackDiv.style.display = "block"; // Show feedback section
 }
 
 function showAnswer() {
@@ -295,6 +305,7 @@ function showAnswer() {
   html += "</div>";
 
   document.getElementById("markov-answers").innerHTML = html;
+  document.getElementById("markov-answers").style.display = "block"; // Show answers section
 }
 
 function showHint() {
@@ -331,6 +342,7 @@ function showHint() {
         </div>`;
   }
   document.getElementById("markov-answers").innerHTML = hint;
+  document.getElementById("markov-answers").style.display = "block"; // Show answers section for hint
 }
 
 function resetSimulation() {
@@ -376,5 +388,23 @@ function loadCorpus(corpusKey) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize instructions bar to be collapsed by default (hidden)
+  const instructionsContent = document.getElementById("instructions-content");
+  const instructionsArrow = document.getElementById("instructions-arrow");
+
+  if (instructionsContent) {
+    instructionsContent.style.display = "none"; // Hide by default
+  }
+
+  if (instructionsArrow) {
+    instructionsArrow.classList.add("rotated"); // Arrow points up initially (collapsed state)
+  }
+
+  // Also use jQuery to ensure it's hidden (failsafe)
+  $(document).ready(function () {
+    $("#instructions-content").hide(); // Make sure it's hidden by default
+    $("#instructions-arrow").addClass("rotated"); // Arrow points up (collapsed)
+  });
+
   loadCorpus(currentCorpusKey);
 });

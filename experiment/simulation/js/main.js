@@ -158,11 +158,21 @@ function renderSimulation() {
   document.getElementById("show-answer-btn").onclick = showAnswer;
   document.getElementById("show-hint-btn").onclick = showHint;
   document.getElementById("reset-btn").onclick = resetSimulation;
+
+  // Adjust layout based on table width
+  onTableUpdate();
 }
 
 function generateEditableEmissionMatrix(corpus) {
   let html =
-    '<div class="markov-section-title">Emission Matrix</div>' +
+    '<div class="emission-matrix-header">' +
+    '<div class="markov-section-title">' +
+    "Emission Matrix " +
+    '<span class="info-icon" tabindex="0" onclick="showEmissionDetails()" title="Click to see emission matrix explanation">' +
+    '<i class="fas fa-info-circle"></i>' +
+    "</span>" +
+    "</div>" +
+    "</div>" +
     '<table class="emission-matrix-table">';
   html += "<tr><td></td>";
   corpus.words.forEach((word) => {
@@ -191,7 +201,14 @@ function generateEditableEmissionMatrix(corpus) {
 
 function generateEditableTransitionMatrix(corpus) {
   let html =
-    '<div class="markov-section-title">Transition Matrix</div>' +
+    '<div class="transition-matrix-header">' +
+    '<div class="markov-section-title">' +
+    "Transition Matrix " +
+    '<span class="info-icon" tabindex="0" onclick="showPOSDetails()" title="Click to see detailed POS tag explanations">' +
+    '<i class="fas fa-info-circle"></i>' +
+    "</span>" +
+    "</div>" +
+    "</div>" +
     '<table class="transition-matrix-table">';
   html += "<tr><td></td>";
   corpus.pos.forEach((pos) => {
@@ -306,6 +323,9 @@ function showAnswer() {
 
   document.getElementById("markov-answers").innerHTML = html;
   document.getElementById("markov-answers").style.display = "block"; // Show answers section
+
+  // Adjust layout based on table width
+  onTableUpdate();
 }
 
 function showHint() {
@@ -374,6 +394,259 @@ function generateStaticMatrix(flatMatrix, rowLabels, colLabels, type) {
   return html;
 }
 
+// Responsive layout adjustment based on table width
+function adjustLayoutForTableWidth() {
+  // Only apply on desktop (>900px)
+  if (window.innerWidth <= 900) {
+    return;
+  }
+
+  const container = document.getElementById("main-2pane-container");
+  const rightPane = document.getElementById("right-pane");
+  const leftPane = document.getElementById("left-pane");
+  const tables = rightPane
+    ? rightPane.querySelectorAll(
+        ".emission-matrix-table, .transition-matrix-table"
+      )
+    : [];
+
+  if (!container || !leftPane || !rightPane || tables.length === 0) {
+    return;
+  }
+
+  // Remove existing layout classes
+  container.classList.remove(
+    "wide-table-layout",
+    "extra-wide-table-layout",
+    "ultra-wide-table-layout"
+  );
+
+  // Wait for DOM to settle, then measure
+  setTimeout(() => {
+    // Find the widest table and its container
+    let maxTableWidth = 0;
+    let widestTableContainer = null;
+
+    tables.forEach((table) => {
+      // Reset table width to auto for accurate measurement
+      table.style.width = "auto";
+      const tableContainer = table.closest(
+        ".emission-matrix-container, .transition-matrix-container"
+      );
+
+      // Get the natural width of the table
+      const tableWidth = table.scrollWidth || table.offsetWidth;
+      if (tableWidth > maxTableWidth) {
+        maxTableWidth = tableWidth;
+        widestTableContainer = tableContainer;
+      }
+    });
+
+    // Add padding for the container
+    const containerPadding = 48; // 1.5em * 2 for left and right padding
+    const totalTableWidth = maxTableWidth + containerPadding;
+
+    // Get viewport width
+    const viewportWidth = window.innerWidth;
+    const maxContainerWidth = Math.min(1400, viewportWidth * 0.95); // Max container width with some margin
+
+    // Calculate gap and padding
+    const gap = 32; // 2rem gap
+    const mainPadding = 32; // Total container padding
+
+    // Calculate current left pane width
+    const leftPaneWidth = leftPane.offsetWidth;
+
+    // Calculate available width for right pane in current layout
+    const availableRightPaneWidth =
+      maxContainerWidth - leftPaneWidth - gap - mainPadding;
+
+    // Check if tables exceed available space and apply appropriate layout
+    if (totalTableWidth > availableRightPaneWidth) {
+      const excessWidth = totalTableWidth - availableRightPaneWidth;
+
+      if (excessWidth > 400) {
+        container.classList.add("ultra-wide-table-layout");
+      } else if (excessWidth > 200) {
+        container.classList.add("extra-wide-table-layout");
+      } else {
+        container.classList.add("wide-table-layout");
+      }
+
+      // Force container to use full viewport width
+      container.style.maxWidth = "100vw";
+    } else {
+      // Reset container width for normal layout
+      container.style.maxWidth = "1400px";
+    }
+  }, 50);
+}
+
+// Force right pane to expand and contain all tables
+function ensureRightPaneContainment() {
+  const rightPane = document.getElementById("right-pane");
+  const container = document.getElementById("main-2pane-container");
+
+  if (!rightPane || !container || window.innerWidth <= 900) {
+    return;
+  }
+
+  // Find all matrix containers within right pane
+  const matrixContainers = rightPane.querySelectorAll(
+    ".emission-matrix-container, .transition-matrix-container"
+  );
+
+  // Ensure each matrix container fits within right pane
+  matrixContainers.forEach((matrixContainer) => {
+    const table = matrixContainer.querySelector("table");
+    if (table) {
+      // Get the natural width of the table
+      const tableWidth = table.scrollWidth || table.offsetWidth;
+      const containerPadding = 48; // 1.5em * 2
+      const totalNeededWidth = tableWidth + containerPadding;
+
+      // Ensure the matrix container can accommodate the table
+      matrixContainer.style.minWidth = totalNeededWidth + "px";
+      matrixContainer.style.width = "100%";
+      matrixContainer.style.overflowX = "visible";
+    }
+  });
+
+  // Ensure right pane expands to fit content
+  rightPane.style.minWidth = "fit-content";
+  rightPane.style.overflowX = "visible";
+}
+
+// Call layout adjustment when tables are updated
+function onTableUpdate() {
+  // Small delay to ensure DOM is updated
+  setTimeout(() => {
+    if (window.innerWidth > 900) {
+      // Desktop: apply dynamic layout and containment
+      adjustLayoutForTableWidth();
+      ensureRightPaneContainment();
+    } else {
+      // Mobile/Tablet: reset any desktop-specific styles
+      resetMobileTabletStyles();
+    }
+  }, 100);
+}
+
+// Add event listener for window resize
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 900) {
+    // Desktop: apply dynamic layout and containment
+    adjustLayoutForTableWidth();
+    ensureRightPaneContainment();
+  } else {
+    // Mobile/Tablet: reset any desktop-specific styles
+    resetMobileTabletStyles();
+  }
+});
+
+// Reset desktop-specific styles for mobile/tablet
+function resetMobileTabletStyles() {
+  // Only apply on mobile/tablet (≤900px)
+  if (window.innerWidth > 900) {
+    return;
+  }
+
+  const rightPane = document.getElementById("right-pane");
+  const matrixContainers = document.querySelectorAll(
+    ".emission-matrix-container, .transition-matrix-container"
+  );
+
+  // Reset right pane styles for mobile/tablet
+  if (rightPane) {
+    rightPane.style.minWidth = "";
+    rightPane.style.overflowX = "";
+  }
+
+  // Reset matrix container styles for mobile/tablet
+  matrixContainers.forEach((matrixContainer) => {
+    matrixContainer.style.minWidth = "";
+    matrixContainer.style.width = "";
+    matrixContainer.style.overflowX = "";
+  });
+}
+
+// Show POS tag details in a modal popup
+function showPOSDetails() {
+  const posGlossary = {
+    DET: "Determiner (the, a, an, this, that) - Words that introduce and specify nouns",
+    ADJ: "Adjective (quick, brown, lazy, good) - Words that describe or modify nouns",
+    NOUN: "Noun (fox, dog, park, students, books) - Words that name people, places, things, or ideas",
+    VERB: "Verb (jumps, are, reading, play) - Words that express actions, states, or occurrences",
+    ADP: "Adposition/Preposition (over, in, near, of) - Words that show relationships between other words",
+    ADV: "Adverb (quickly, quietly, every) - Words that modify verbs, adjectives, or other adverbs",
+    PRON: "Pronoun (they, it, that) - Words that replace or refer to nouns",
+    CONJ: "Conjunction (and, or, but) - Words that connect words, phrases, or clauses",
+    NUM: "Number (one, two, first) - Words that express quantity or order",
+    PRT: "Particle (up, down, over) - Words that combine with verbs to form phrasal verbs",
+    X: "Other/Unknown - Words that don't fit into standard categories",
+    eos: "End of Sentence marker - Special symbol indicating sentence boundaries",
+  };
+
+  // Get the current corpus to show only relevant POS tags
+  const corpus = currentCorpus;
+  let modalContent = '<div class="pos-modal-content">';
+  modalContent += '<div class="pos-modal-header">';
+  modalContent += "<h3>POS Tags Used in This Corpus</h3>";
+  modalContent +=
+    '<span class="pos-modal-close" onclick="closePOSModal()">&times;</span>';
+  modalContent += "</div>";
+  modalContent += '<div class="pos-modal-body">';
+
+  if (corpus && corpus.pos) {
+    corpus.pos.forEach((pos) => {
+      if (posGlossary[pos]) {
+        modalContent += `<div class="pos-detail-item">`;
+        modalContent += `<div class="pos-detail-tag">${pos}</div>`;
+        modalContent += `<div class="pos-detail-description">${posGlossary[pos]}</div>`;
+        modalContent += `</div>`;
+      }
+    });
+  }
+
+  modalContent += "</div>";
+  modalContent += "</div>";
+
+  // Create or update the modal
+  let modal = document.getElementById("pos-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "pos-modal";
+    modal.className = "pos-modal";
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = modalContent;
+  modal.style.display = "block";
+
+  // Close modal when clicking outside
+  modal.onclick = function (event) {
+    if (event.target === modal) {
+      closePOSModal();
+    }
+  };
+}
+
+// Close POS details modal
+function closePOSModal() {
+  const modal = document.getElementById("pos-modal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+// Close modals with Escape key
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closePOSModal();
+    closeEmissionModal();
+  }
+});
+
 // Main entry point
 function loadCorpus(corpusKey) {
   currentCorpusKey = corpusKey;
@@ -408,3 +681,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loadCorpus(currentCorpusKey);
 });
+
+// Show Emission Matrix details in a modal popup
+function showEmissionDetails() {
+  let modalContent = '<div class="pos-modal-content">';
+  modalContent += '<div class="pos-modal-header">';
+  modalContent += "<h3>Emission Matrix Explanation</h3>";
+  modalContent +=
+    '<span class="pos-modal-close" onclick="closeEmissionModal()">&times;</span>';
+  modalContent += "</div>";
+  modalContent += '<div class="pos-modal-body">';
+
+  modalContent += `<div class="pos-detail-item">`;
+  modalContent += `<div class="pos-detail-tag">ROWS</div>`;
+  modalContent += `<div class="pos-detail-description">Each row represents a <strong>POS tag (grammatical state)</strong> that can emit (produce) words. The emission matrix shows the probability of each POS tag generating specific words.</div>`;
+  modalContent += `</div>`;
+
+  modalContent += `<div class="pos-detail-item">`;
+  modalContent += `<div class="pos-detail-tag">COLS</div>`;
+  modalContent += `<div class="pos-detail-description">Each column represents a <strong>word in the vocabulary</strong>. The values show how likely each POS tag is to produce that particular word.</div>`;
+  modalContent += `</div>`;
+
+  modalContent += `<div class="pos-detail-item">`;
+  modalContent += `<div class="pos-detail-tag">VALUES</div>`;
+  modalContent += `<div class="pos-detail-description">Each cell contains the <strong>emission probability P(word|POS)</strong> - the likelihood that a particular POS tag will generate a specific word. Values range from 0 to 1, with higher values indicating stronger associations.</div>`;
+  modalContent += `</div>`;
+
+  modalContent += `<div class="pos-detail-item">`;
+  modalContent += `<div class="pos-detail-tag">EXAMPLE</div>`;
+  modalContent += `<div class="pos-detail-description">If P(dog|NOUN) = 0.8, it means there's an 80% chance that when we see a NOUN tag, it will generate the word "dog". Each row should sum to 1.0 across all possible words.</div>`;
+  modalContent += `</div>`;
+
+  modalContent += "</div>";
+  modalContent += "</div>";
+
+  // Create or update the modal
+  let modal = document.getElementById("emission-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "emission-modal";
+    modal.className = "pos-modal";
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = modalContent;
+  modal.style.display = "block";
+
+  // Close modal when clicking outside
+  modal.onclick = function (event) {
+    if (event.target === modal) {
+      closeEmissionModal();
+    }
+  };
+}
+
+// Close Emission details modal
+function closeEmissionModal() {
+  const modal = document.getElementById("emission-modal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}

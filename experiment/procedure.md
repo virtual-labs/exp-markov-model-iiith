@@ -1,6 +1,6 @@
 This experiment demonstrates Hidden Markov Models for POS tagging through an interactive simulation. Follow these steps to understand and practice HMM-based POS tagging:
 
-#### **Step 1: Understanding the Interface**
+### Step 1: Understanding the Interface
 
 The simulation interface consists of several key components:
 
@@ -10,14 +10,14 @@ The simulation interface consists of several key components:
 - **Input Section**: Where you can enter sentences for POS tagging
 - **Results Display**: Shows the step-by-step Viterbi algorithm execution
 
-#### **Step 2: Examine the Training Corpus**
+### Step 2: Examine the Training Corpus
 
 1. Review the provided training corpus displayed in the interface
 2. Observe how words are paired with their corresponding POS tags
 3. Notice the format: `word/tag` for each token
 4. Pay attention to special markers like `EOS/eos` (End of Sentence)
 
-#### **Step 3: Analyze the Probability Matrices**
+### Step 3: Analyze the Probability Matrices
 
 **Transition Matrix:**
 
@@ -33,7 +33,7 @@ The simulation interface consists of several key components:
 3. Notice how some words can have multiple possible tags with different probabilities
 4. Observe cases of ambiguous words (like "cut" which can be noun or verb)
 
-#### **Step 4: Interactive POS Tagging**
+### Step 4: Interactive POS Tagging
 
 1. **Enter a Test Sentence**: Input a sentence in the provided text field
 2. **Initiate Tagging**: Click the "Tag Sentence" or similar button to start the process
@@ -43,14 +43,14 @@ The simulation interface consists of several key components:
    - **Path Tracking**: Notice how the algorithm keeps track of the most likely paths
    - **Backtracking**: See how the final tag sequence is determined
 
-#### **Step 5: Analyze Results**
+### Step 5: Analyze Results
 
 1. **Review the Final Tag Sequence**: Examine the most likely POS tags assigned to each word
 2. **Study the Probability Scores**: Understand the confidence scores for each tagging decision
 3. **Compare Different Paths**: If available, compare alternative tag sequences and their probabilities
 4. **Understand Context Effects**: Notice how context influences tag assignment for ambiguous words
 
-#### **Step 6: Experiment with Different Inputs**
+### Step 6: Experiment with Different Inputs
 
 1. **Try Various Sentence Types**:
 
@@ -64,7 +64,7 @@ The simulation interface consists of several key components:
    - What happens with unknown or rare words?
    - How do different word orders impact tagging?
 
-#### **Step 7: Matrix Calculation Practice (if available)**
+### Step 7: Matrix Calculation Practice (if available)
 
 If the simulation includes interactive matrix calculation:
 
@@ -85,14 +85,14 @@ If the simulation includes interactive matrix calculation:
    - Incorrect answers will be highlighted in red
    - Review and correct any mistakes
 
-#### **Step 8: Advanced Exploration**
+### Step 8: Advanced Exploration
 
 1. **Modify Parameters** (if available): Experiment with different probability values to see their effects
 2. **Compare Algorithms**: If multiple algorithms are available, compare their performance
 3. **Error Analysis**: Identify common tagging errors and understand their causes
 4. **Performance Evaluation**: Analyze accuracy and efficiency metrics
 
-#### **Learning Outcomes**
+### Learning Outcomes
 
 By completing this procedure, you will:
 
@@ -102,7 +102,7 @@ By completing this procedure, you will:
 - Recognize the importance of context in disambiguation
 - Appreciate the challenges and limitations of statistical NLP approaches
 
-#### **Tips for Success**
+### Tips for Success
 
 - **Take Time to Understand**: Don't rush through the matrices; understanding the probabilities is crucial
 - **Experiment Actively**: Try different sentences to see how the algorithm responds

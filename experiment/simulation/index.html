@@ -24,48 +24,55 @@
   <body class="index" id="page-top">
     <div class="container">
       <div class="main-content">
-        <div
-          id="instructions-bar"
-          onclick="$('#instructions-content').slideToggle(200); $('#instructions-arrow').toggleClass('rotated');"
-        >
-          <span class="instructions-label">Instructions</span>
-          <span id="instructions-arrow" class="arrow-icon">▼</span>
-        </div>
-        <div id="instructions-content">
-          <ol style="margin: 0; padding-left: 20px">
-            <li>
-              Select a corpus from the dropdown menu. By default, 'Corpus A' is
-              selected and loaded.
-            </li>
-            <li>
-              Observe the displayed transition and emission probabilities
-              computed from the training data.
-            </li>
-            <li>
-              Enter probability values for each state transition and emission in
-              the Markov model simulation. All input fields are available at
-              once.
-            </li>
-            <li>
-              Click the "Check" button to validate your answers. Correct values
-              are retained; incorrect ones can be revised. Feedback is provided
-              for each attempt.
-            </li>
-            <li>
-              If you need help, click "Show Hint" for guidance. To see the
-              correct answers and compare them with your input, click "Show
-              Answer" (only after entering your answers).
-            </li>
-            <li>
-              Once all answers are correct, the simulation displays the final
-              probability calculations and results.
-            </li>
-            <li>
-              To start over or switch to a different corpus, use the "Reset"
-              button (which always resets to Corpus A) or select a new corpus
-              from the dropdown.
-            </li>
-          </ol>
+        <div id="instructions-panel">
+          <div
+            id="instructions-bar"
+            onclick="$('#instructions-content').slideToggle(200); $('#instructions-arrow').toggleClass('rotated');"
+          >
+            <div class="instructions-title-wrapper">
+              <span class="instructions-label">Instructions</span>
+              <i
+                id="instructions-arrow"
+                class="fas fa-chevron-down arrow-icon"
+              ></i>
+            </div>
+          </div>
+          <div id="instructions-content">
+            <ol style="margin: 0; padding-left: 20px">
+              <li>
+                Select a corpus from the dropdown menu. By default, 'Corpus A'
+                is selected and loaded.
+              </li>
+              <li>
+                Observe the displayed transition and emission probabilities
+                computed from the training data.
+              </li>
+              <li>
+                Enter probability values for each state transition and emission
+                in the Markov model simulation. All input fields are available
+                at once.
+              </li>
+              <li>
+                Click the "Check" button to validate your answers. Correct
+                values are retained; incorrect ones can be revised. Feedback is
+                provided for each attempt.
+              </li>
+              <li>
+                If you need help, click "Show Hint" for guidance. To see the
+                correct answers and compare them with your input, click "Show
+                Answer" (only after entering your answers).
+              </li>
+              <li>
+                Once all answers are correct, the simulation displays the final
+                probability calculations and results.
+              </li>
+              <li>
+                To start over or switch to a different corpus, use the "Reset"
+                button (which always resets to Corpus A) or select a new corpus
+                from the dropdown.
+              </li>
+            </ol>
+          </div>
         </div>
         <div id="main-2pane-container">
           <!-- Left Pane - Corpus Selection and Info -->

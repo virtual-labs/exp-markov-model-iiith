@@ -173,7 +173,9 @@ function generateEditableEmissionMatrix(corpus) {
     "</span>" +
     "</div>" +
     "</div>" +
-    '<table class="emission-matrix-table">';
+    '<table class="emission-matrix-table" data-corpus="' +
+    currentCorpusKey +
+    '">';
   html += "<tr><td></td>";
   corpus.words.forEach((word) => {
     html += "<td><b>" + word + "</b></td>";
@@ -209,7 +211,9 @@ function generateEditableTransitionMatrix(corpus) {
     "</span>" +
     "</div>" +
     "</div>" +
-    '<table class="transition-matrix-table">';
+    '<table class="transition-matrix-table" data-corpus="' +
+    currentCorpusKey +
+    '">';
   html += "<tr><td></td>";
   corpus.pos.forEach((pos) => {
     html += "<td><b>" + pos + "</b></td>";
@@ -234,7 +238,25 @@ function generateEditableTransitionMatrix(corpus) {
   return html;
 }
 
+// Helper function to hide all output sections for mutual exclusivity
+function hideAllOutputSections() {
+  const feedbackDiv = document.getElementById("markov-feedback");
+  const answersDiv = document.getElementById("markov-answers");
+
+  if (feedbackDiv) {
+    feedbackDiv.style.display = "none";
+    feedbackDiv.innerHTML = "";
+  }
+  if (answersDiv) {
+    answersDiv.style.display = "none";
+    answersDiv.innerHTML = "";
+  }
+}
+
 function checkMatrices() {
+  // Hide other sections first to ensure mutual exclusivity
+  hideAllOutputSections();
+
   const corpus = currentCorpus;
   let emissionOk = true,
     transitionOk = true;
@@ -292,13 +314,15 @@ function checkMatrices() {
   }
   const feedbackDiv = document.getElementById("markov-feedback");
   feedbackDiv.innerHTML = msg;
-  feedbackDiv.style.display = "block"; // Show feedback section
+  feedbackDiv.style.display = "block"; // Show only feedback section
 }
 
 function showAnswer() {
-  const corpus = corpusData[currentCorpusKey];
-  let html = '<div class="markov-section-title">Correct Matrices</div>';
+  // Hide other sections first to ensure mutual exclusivity
+  hideAllOutputSections();
 
+  const corpus = corpusData[currentCorpusKey];
+  let html = "";
   html += '<div class="emission-matrix-container">';
   html += '<div class="markov-section-title">Correct Emission Matrix</div>';
   // Skip the first POS tag's data (first corpus.words.length elements)
@@ -322,13 +346,16 @@ function showAnswer() {
   html += "</div>";
 
   document.getElementById("markov-answers").innerHTML = html;
-  document.getElementById("markov-answers").style.display = "block"; // Show answers section
+  document.getElementById("markov-answers").style.display = "block"; // Show only answers section
 
   // Adjust layout based on table width
   onTableUpdate();
 }
 
 function showHint() {
+  // Hide other sections first to ensure mutual exclusivity
+  hideAllOutputSections();
+
   let hint = "";
   if (currentCorpusKey === "corpus1") {
     hint = `<div class="markov-hint">
@@ -362,10 +389,13 @@ function showHint() {
         </div>`;
   }
   document.getElementById("markov-answers").innerHTML = hint;
-  document.getElementById("markov-answers").style.display = "block"; // Show answers section for hint
+  document.getElementById("markov-answers").style.display = "block"; // Show only answers section for hint
 }
 
 function resetSimulation() {
+  // Hide all output sections when resetting
+  hideAllOutputSections();
+
   currentCorpusKey = "corpus1";
   loadCorpus(currentCorpusKey);
 }
@@ -394,7 +424,7 @@ function generateStaticMatrix(flatMatrix, rowLabels, colLabels, type) {
   return html;
 }
 
-// Responsive layout adjustment based on table width
+// Responsive layout adjustment - simplified since we removed dynamic layout classes
 function adjustLayoutForTableWidth() {
   // Only apply on desktop (>900px)
   if (window.innerWidth <= 900) {
@@ -404,85 +434,25 @@ function adjustLayoutForTableWidth() {
   const container = document.getElementById("main-2pane-container");
   const rightPane = document.getElementById("right-pane");
   const leftPane = document.getElementById("left-pane");
-  const tables = rightPane
-    ? rightPane.querySelectorAll(
-        ".emission-matrix-table, .transition-matrix-table"
-      )
-    : [];
 
-  if (!container || !leftPane || !rightPane || tables.length === 0) {
+  if (!container || !leftPane || !rightPane) {
     return;
   }
 
-  // Remove existing layout classes
-  container.classList.remove(
-    "wide-table-layout",
-    "extra-wide-table-layout",
-    "ultra-wide-table-layout"
-  );
-
-  // Wait for DOM to settle, then measure
+  // Simple layout adjustment without overriding CSS flexbox values
   setTimeout(() => {
-    // Find the widest table and its container
-    let maxTableWidth = 0;
-    let widestTableContainer = null;
+    // Don't override the CSS flex settings, just ensure overflow is handled
+    rightPane.style.overflow = "visible";
 
-    tables.forEach((table) => {
-      // Reset table width to auto for accurate measurement
-      table.style.width = "auto";
-      const tableContainer = table.closest(
-        ".emission-matrix-container, .transition-matrix-container"
-      );
-
-      // Get the natural width of the table
-      const tableWidth = table.scrollWidth || table.offsetWidth;
-      if (tableWidth > maxTableWidth) {
-        maxTableWidth = tableWidth;
-        widestTableContainer = tableContainer;
-      }
-    });
-
-    // Add padding for the container
-    const containerPadding = 48; // 1.5em * 2 for left and right padding
-    const totalTableWidth = maxTableWidth + containerPadding;
-
-    // Get viewport width
-    const viewportWidth = window.innerWidth;
-    const maxContainerWidth = Math.min(1400, viewportWidth * 0.95); // Max container width with some margin
-
-    // Calculate gap and padding
-    const gap = 32; // 2rem gap
-    const mainPadding = 32; // Total container padding
-
-    // Calculate current left pane width
-    const leftPaneWidth = leftPane.offsetWidth;
-
-    // Calculate available width for right pane in current layout
-    const availableRightPaneWidth =
-      maxContainerWidth - leftPaneWidth - gap - mainPadding;
-
-    // Check if tables exceed available space and apply appropriate layout
-    if (totalTableWidth > availableRightPaneWidth) {
-      const excessWidth = totalTableWidth - availableRightPaneWidth;
-
-      if (excessWidth > 400) {
-        container.classList.add("ultra-wide-table-layout");
-      } else if (excessWidth > 200) {
-        container.classList.add("extra-wide-table-layout");
-      } else {
-        container.classList.add("wide-table-layout");
-      }
-
-      // Force container to use full viewport width
-      container.style.maxWidth = "100vw";
-    } else {
-      // Reset container width for normal layout
-      container.style.maxWidth = "1400px";
-    }
+    // Log dimensions for debugging
+    console.log("Container width:", container.offsetWidth);
+    console.log("Left pane width:", leftPane.offsetWidth);
+    console.log("Right pane width:", rightPane.offsetWidth);
+    console.log("Right pane scroll width:", rightPane.scrollWidth);
   }, 50);
 }
 
-// Force right pane to expand and contain all tables
+// Force right pane to stay within bounds
 function ensureRightPaneContainment() {
   const rightPane = document.getElementById("right-pane");
   const container = document.getElementById("main-2pane-container");
@@ -496,25 +466,36 @@ function ensureRightPaneContainment() {
     ".emission-matrix-container, .transition-matrix-container"
   );
 
-  // Ensure each matrix container fits within right pane
+  // Ensure each matrix container fits within available space
   matrixContainers.forEach((matrixContainer) => {
     const table = matrixContainer.querySelector("table");
     if (table) {
-      // Get the natural width of the table
-      const tableWidth = table.scrollWidth || table.offsetWidth;
-      const containerPadding = 48; // 1.5em * 2
-      const totalNeededWidth = tableWidth + containerPadding;
+      // Force containers to fit within right pane bounds
+      matrixContainer.style.maxWidth = "100%";
+      matrixContainer.style.overflow = "visible";
 
-      // Ensure the matrix container can accommodate the table
-      matrixContainer.style.minWidth = totalNeededWidth + "px";
-      matrixContainer.style.width = "100%";
-      matrixContainer.style.overflowX = "visible";
+      // Log container dimensions for debugging
+      console.log("Matrix container width:", matrixContainer.offsetWidth);
+      console.log(
+        "Matrix container scroll width:",
+        matrixContainer.scrollWidth
+      );
+      console.log("Table width:", table.offsetWidth);
+      console.log("Table scroll width:", table.scrollWidth);
     }
   });
 
-  // Ensure right pane expands to fit content
-  rightPane.style.minWidth = "fit-content";
-  rightPane.style.overflowX = "visible";
+  // Don't override CSS flexbox values, just ensure overflow is handled
+  rightPane.style.overflow = "visible";
+
+  console.log(
+    "Right pane computed width:",
+    window.getComputedStyle(rightPane).width
+  );
+  console.log(
+    "Right pane max-width:",
+    window.getComputedStyle(rightPane).maxWidth
+  );
 }
 
 // Call layout adjustment when tables are updated
@@ -666,17 +647,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const instructionsArrow = document.getElementById("instructions-arrow");
 
   if (instructionsContent) {
-    instructionsContent.style.display = "none"; // Hide by default
+    instructionsContent.style.display = "none"; // Hide by default (collapsed)
   }
 
   if (instructionsArrow) {
-    instructionsArrow.classList.add("rotated"); // Arrow points up initially (collapsed state)
+    instructionsArrow.classList.add("rotated"); // Arrow points down when collapsed
   }
 
   // Also use jQuery to ensure it's hidden (failsafe)
   $(document).ready(function () {
-    $("#instructions-content").hide(); // Make sure it's hidden by default
-    $("#instructions-arrow").addClass("rotated"); // Arrow points up (collapsed)
+    $("#instructions-content").hide(); // Make sure it's hidden by default (collapsed)
+    $("#instructions-arrow").addClass("rotated"); // Arrow points down when collapsed
   });
 
   loadCorpus(currentCorpusKey);

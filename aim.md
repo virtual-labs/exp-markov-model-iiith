@@ -1,0 +1,3 @@
+**To understand and practice Hidden Markov Models for Part-of-Speech tagging through interactive exploration of probabilistic sequence modeling.**
+
+This experiment aims to help students develop proficiency in building and applying HMM-based POS taggers that automatically assign grammatical categories (noun, verb, adjective, etc.) to words in sentences. Through hands-on interaction with transition and emission probability matrices, students will learn to train HMM models, understand the Viterbi algorithm for sequence prediction, and analyze how contextual probabilities resolve ambiguous word classifications in natural language processing.

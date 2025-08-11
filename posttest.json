@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Given a corpus with the sequence 'EOS noun verb EOS', what is the transition probability P(verb|noun)?",
+      "answers": {
+        "a": "0.5",
+        "b": "1.0",
+        "c": "0.33",
+        "d": "Cannot be determined from this information alone"
+      },
+      "explanations": {
+        "a": "Incorrect. This would only be correct if noun appeared twice and was followed by verb once.",
+        "b": "Correct! In this simple corpus, noun appears once and is always followed by verb, so P(verb|noun) = 1/1 = 1.0.",
+        "c": "Incorrect. This would suggest noun appears 3 times, which is not the case.",
+        "d": "Incorrect. We can determine this from the given sequence."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "If the word 'run' appears 3 times as a verb and 2 times as a noun in a corpus, what is the emission probability P(run|verb)?",
+      "answers": {
+        "a": "0.6",
+        "b": "0.4",
+        "c": "Cannot be determined without knowing total verb count",
+        "d": "0.5"
+      },
+      "explanations": {
+        "a": "Incorrect. This would be P(verb|run) = 3/5, not P(run|verb).",
+        "b": "Incorrect. This would be P(noun|run) = 2/5, not P(run|verb).",
+        "c": "Correct! P(run|verb) = count(run,verb) / count(verb). We know count(run,verb) = 3, but we need the total count of all verbs to calculate this probability.",
+        "d": "Incorrect. This is not derivable from the given information."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the significance of the EOS (End of Sentence) marker in HMM-based POS tagging?",
+      "answers": {
+        "a": "It increases the vocabulary size",
+        "b": "It helps model sentence boundaries and initial tag probabilities",
+        "c": "It makes the algorithm faster",
+        "d": "It is only used for punctuation"
+      },
+      "explanations": {
+        "a": "Incorrect. EOS is a special marker, not a regular vocabulary item.",
+        "b": "Correct! EOS helps model which tags are likely to start sentences and which are likely to end them, improving tagging accuracy at sentence boundaries.",
+        "c": "Incorrect. EOS doesn't directly impact algorithmic speed.",
+        "d": "Incorrect. EOS is a sentence boundary marker, not specifically for punctuation."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In the Viterbi algorithm, what does the backtracking step accomplish?",
+      "answers": {
+        "a": "It calculates the probabilities for each word",
+        "b": "It finds the sequence of states that led to the highest probability",
+        "c": "It initializes the algorithm",
+        "d": "It handles unknown words"
+      },
+      "explanations": {
+        "a": "Incorrect. Probability calculations are done in the forward pass.",
+        "b": "Correct! Backtracking traces back through the stored pointers to reconstruct the most likely sequence of POS tags.",
+        "c": "Incorrect. Initialization is a separate step at the beginning of the algorithm.",
+        "d": "Incorrect. Unknown word handling is typically done during probability calculations, not backtracking."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Why might the word 'can' be challenging for an HMM-based POS tagger?",
+      "answers": {
+        "a": "It's too short",
+        "b": "It can be both a modal verb and a noun depending on context",
+        "c": "It appears too frequently",
+        "d": "It's not in the training data"
+      },
+      "explanations": {
+        "a": "Incorrect. Word length is not inherently challenging for HMMs.",
+        "b": "Correct! 'Can' is ambiguous - it can be a modal verb ('I can swim') or a noun ('a can of soup'), requiring context to disambiguate.",
+        "c": "Incorrect. High frequency words are generally easier, not harder, for statistical models.",
+        "d": "Incorrect. This would be an unknown word problem, not specific to 'can'."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What happens during the initialization step of the Viterbi algorithm?",
+      "answers": {
+        "a": "The most likely final state is determined",
+        "b": "Probabilities for the first word are calculated using initial state probabilities and emission probabilities",
+        "c": "The transition matrix is normalized",
+        "d": "The training data is processed"
+      },
+      "explanations": {
+        "a": "Incorrect. Final state determination happens at the end of the algorithm.",
+        "b": "Correct! Initialization calculates δ₁(i) = π(i) × P(word₁|state_i) for each possible initial state.",
+        "c": "Incorrect. Matrix normalization is done during training, not during Viterbi execution.",
+        "d": "Incorrect. Training data processing happens before running the Viterbi algorithm."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In a more complex scenario, if we have the sequence 'The/DT dog/NN runs/VBZ fast/RB', what would be the transition probability P(VBZ|NN)?",
+      "answers": {
+        "a": "1.0, since NN is always followed by VBZ in this example",
+        "b": "0.5, since there's one transition out of two possible",
+        "c": "Cannot be determined without more training data",
+        "d": "0.25, since there are four words"
+      },
+      "explanations": {
+        "a": "Incorrect. This single example doesn't provide enough data to reliably estimate the probability.",
+        "b": "Incorrect. This logic is flawed - we need to count all NN occurrences, not just transitions.",
+        "c": "Correct! A single example is insufficient to estimate transition probabilities reliably. We need a larger corpus to get meaningful statistics.",
+        "d": "Incorrect. The number of words in the sequence is irrelevant to transition probability calculation."
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is the computational complexity of the Viterbi algorithm for a sentence of length T with N possible POS tags?",
+      "answers": {
+        "a": "O(T × N)",
+        "b": "O(T × N²)",
+        "c": "O(T²× N)",
+        "d": "O(N^T)"
+      },
+      "explanations": {
+        "a": "Incorrect. This doesn't account for the need to consider all possible previous states.",
+        "b": "Correct! For each of T positions, we consider N current states and N previous states, giving O(T × N²) complexity.",
+        "c": "Incorrect. The sentence length appears linearly, not quadratically, in the complexity.",
+        "d": "Incorrect. This would be the complexity of brute force search, not the efficient Viterbi algorithm."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "How does the HMM handle data sparsity problems in POS tagging?",
+      "answers": {
+        "a": "By using only the most frequent words",
+        "b": "By implementing smoothing techniques and handling unknown words",
+        "c": "By ignoring rare words completely",
+        "d": "By using only bigram models"
+      },
+      "explanations": {
+        "a": "Incorrect. This would severely limit the model's applicability.",
+        "b": "Correct! HMMs use smoothing techniques (like add-one smoothing) and unknown word handling strategies to deal with sparse data and unseen word-tag combinations.",
+        "c": "Incorrect. Ignoring rare words would reduce the model's coverage and usefulness.",
+        "d": "Incorrect. Using only bigram models doesn't solve sparsity; it's about probability estimation techniques."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    }
+  ]
+}

@@ -1,1 +1,1676 @@
-/* You CSS goes in here */
+/* main.css: Modern responsive design for Markov Model experiment */
+:root {
+  --color-primary: #4361ee;
+  --color-primary-light: #4895ef;
+  --color-primary-dark: #3a0ca3;
+  --color-secondary: #4cc9f0;
+  --color-secondary-light: #72efdd;
+  --color-secondary-dark: #3f8efc;
+  --color-accent: #f72585;
+  --color-accent-light: #ff8fab;
+  --color-accent-dark: #b5179e;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08),
+    0 2px 4px -1px rgba(67, 97, 238, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
+    0 4px 6px -2px rgba(67, 97, 238, 0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  font-size: 0.97em;
+  min-height: 100vh;
+  overflow-x: visible;
+}
+
+.container {
+  max-width: 100vw;
+  width: 100vw;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.main-content {
+  width: 90%; /* Reasonable width with margins on both sides */
+  max-width: 1400px; /* Maximum width for very large screens */
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Instructions Panel Wrapper */
+#instructions-panel {
+  width: 80%; /* 80% of main-content width */
+  margin: 0 auto;
+  order: 0;
+  box-sizing: border-box;
+}
+
+.instructions-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem; /* Slightly smaller */
+  font-weight: 700;
+  color: #22223b;
+  background: transparent;
+  margin: 0;
+  padding: 0; /* Remove padding since bar handles it */
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0; /* Let the bar handle border-radius */
+  transition: none; /* Remove transition */
+  letter-spacing: 0.01em;
+}
+
+/* Instructions Panel */
+#instructions-bar {
+  width: 90%; /* Match main-content width */
+  max-width: 1400px; /* Match main-content max-width */
+  margin: 1rem auto;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-radius: 1.2rem 1.2rem 0 0; /* Only top corners curved */
+  cursor: pointer;
+  user-select: none;
+  transition: none; /* Remove transition to prevent highlighting */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  padding: 0.8rem 1.5rem; /* Reduced padding for smaller height */
+  border: 1px solid var(--color-neutral-200);
+  box-sizing: border-box;
+  order: 0; /* Ensure it appears first */
+}
+
+.instructions-content {
+  width: 90%; /* Match instructions-bar width */
+  max-width: 1400px; /* Match instructions-bar max-width */
+  margin: 0 auto 1.5rem auto;
+  background: #fff;
+  border: 1px solid var(--color-neutral-200);
+  border-top: none;
+  border-radius: 0; /* Flat bottom - no curved corners */
+  padding: 1.2rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  display: none;
+}
+
+.instructions-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.instructions-label {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  font-size: 1.2em;
+  letter-spacing: 0.01em;
+  text-align: center;
+  margin: 0;
+}
+
+.arrow-icon {
+  font-size: 1rem;
+  color: var(--color-primary-dark);
+  transition: transform 0.3s ease;
+  transform: rotate(180deg); /* Default state: up arrow when expanded */
+}
+
+.arrow-icon.rotated {
+  transform: rotate(0deg); /* Rotated state: down arrow when collapsed */
+}
+
+#instructions-content {
+  width: 100%;
+  margin: 0 auto 1.5rem auto;
+  background: #fff;
+  border: 1px solid var(--color-neutral-200);
+  border-top: none;
+  border-radius: 0;
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  display: none;
+}
+
+#instructions-content ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.6;
+}
+
+#instructions-content li {
+  margin-bottom: 0.6rem;
+  color: var(--color-neutral-800);
+}
+
+/* Main Layout - Base styles for mobile/tablet */
+#main-2pane-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#left-pane {
+  flex: 0 0 300px; /* Fixed width instead of flex: 1 */
+  min-width: 300px;
+  margin-right: 1rem;
+}
+
+#right-pane {
+  flex: 1; /* Takes remaining space */
+  min-width: 0; /* Allows flex item to shrink below content size */
+  width: calc(100% - 320px); /* Full width minus left pane and gap */
+}
+
+/* Pane Sections */
+#corpus-selection,
+#corpus-info {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.markov-matrices-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  width: fit-content;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center all child elements horizontally */
+}
+
+/* Matrix container improvements */
+.matrix-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Matrix containers for responsive behavior */
+.emission-matrix-container,
+.transition-matrix-container {
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: visible;
+  margin-bottom: 1rem;
+  display: block; /* Changed from inline-block to block for better centering */
+}
+
+/* Matrix containers when inside markov-matrices section */
+.markov-matrices-section .emission-matrix-container,
+.markov-matrices-section .transition-matrix-container {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Table containers inside markov-matrices section */
+.markov-matrices-section .markov-table-container {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Tables inside markov-matrices section */
+.markov-matrices-section .emission-matrix-table,
+.markov-matrices-section .transition-matrix-table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto; /* Changed from fixed to auto */
+  margin: 0 auto;
+}
+
+/* Matrix containers when inside markov-answers section */
+.markov-answers-section .emission-matrix-container,
+.markov-answers-section .transition-matrix-container {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Section titles inside matrix containers in answers section */
+.markov-answers-section .emission-matrix-container .markov-section-title,
+.markov-answers-section .transition-matrix-container .markov-section-title {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Tables inside matrix containers in answers section */
+.markov-answers-section .emission-matrix-table,
+.markov-answers-section .transition-matrix-table {
+  width: 100% !important;
+  max-width: 100%;
+  margin: 0 auto;
+  table-layout: auto; /* Changed from fixed to auto */
+}
+
+/* Ensure tables don't force horizontal scrolling on desktop */
+.markov-table,
+.emission-matrix-table,
+.transition-matrix-table {
+  width: auto;
+}
+
+.markov-feedback-section,
+.markov-answers-section {
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  display: none;
+}
+
+.markov-feedback-section.visible,
+.markov-answers-section.visible {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Section Titles */
+.markov-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 0.75rem 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* ===== MATRIX TABLE STYLES - Content-Based Column Widths ===== */
+
+/* Emission and Transition Matrix Tables */
+.emission-matrix-table,
+.transition-matrix-table {
+  width: 100%;
+  table-layout: auto; /* Allow content-based sizing */
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-size: 14px;
+  margin: 0 auto;
+  background: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+/* Header styling for better spacing */
+.emission-matrix-table th,
+.transition-matrix-table th {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  min-width: 60px; /* Minimum width for headers */
+  word-break: break-word;
+}
+
+/* Row headers (first column) */
+.emission-matrix-table th:first-child,
+.transition-matrix-table th:first-child,
+.emission-matrix-table td:first-child,
+.transition-matrix-table td:first-child {
+  background: #e9ecef;
+  font-weight: 600;
+  min-width: 80px;
+  width: 80px;
+  text-align: center;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+/* Table headers - make word columns responsive to content */
+.emission-matrix-table th {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.transition-matrix-table th {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* POS tag labels (first column) */
+.emission-matrix-table th:first-child,
+.transition-matrix-table th:first-child {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-accent-light)
+  );
+  font-weight: 700;
+  text-align: left;
+  padding-left: 12px;
+  min-width: 80px;
+  font-size: 1rem;
+}
+
+/* Table cells */
+.emission-matrix-table td,
+.transition-matrix-table td {
+  border: 1px solid #dee2e6;
+  padding: 6px 4px;
+  text-align: center;
+  min-width: 60px;
+  font-size: 13px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+/* POS labels in first column */
+.emission-matrix-table td:first-child,
+.transition-matrix-table td:first-child {
+  background: var(--color-neutral-100);
+  font-weight: 600;
+  text-align: left;
+  padding-left: 12px;
+  color: var(--color-neutral-700);
+  border-right: 2px solid var(--color-neutral-300);
+}
+
+/* Input fields within tables */
+.emission-matrix-table input,
+.transition-matrix-table input {
+  width: 100%;
+  max-width: 60px;
+  padding: 4px;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 12px;
+  box-sizing: border-box;
+  background: white;
+  transition: all 0.2s ease;
+  min-height: 28px;
+}
+
+.emission-matrix-table input:focus,
+.transition-matrix-table input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+  background: var(--color-neutral-50);
+}
+
+/* Hover effects */
+.emission-matrix-table tr:hover td,
+.transition-matrix-table tr:hover td {
+  background: var(--color-neutral-50);
+}
+
+.emission-matrix-table td:hover,
+.transition-matrix-table td:hover {
+  background: rgba(72, 239, 221, 0.1) !important;
+  transform: scale(1.02);
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+/* Alternating row colors */
+.emission-matrix-table tbody tr:nth-child(even) td,
+.transition-matrix-table tbody tr:nth-child(even) td {
+  background: var(--color-neutral-50);
+}
+
+.emission-matrix-table tbody tr:nth-child(even) td:first-child,
+.transition-matrix-table tbody tr:nth-child(even) td:first-child {
+  background: var(--color-neutral-200);
+}
+
+/* Dropdowns */
+select,
+.markov-dropdown {
+  width: 100%;
+  background: var(--color-neutral-100);
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-800);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem 1.5rem;
+  padding-right: 2.5rem;
+}
+
+select:hover,
+.markov-dropdown:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+select:focus,
+.markov-dropdown:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+/* Tables */
+.markov-table,
+.emission-matrix-table,
+.transition-matrix-table {
+  width: auto;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  table-layout: auto;
+  display: table;
+}
+
+.markov-table-container {
+  margin: 1rem 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  -webkit-overflow-scrolling: touch;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: visible;
+  display: inline-block;
+}
+
+/* Table containers inside matrix containers in answers section */
+.markov-answers-section .markov-table-container {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.markov-table th,
+.emission-matrix-table th,
+.transition-matrix-table th {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--color-primary-dark);
+  white-space: nowrap;
+  min-width: 60px;
+}
+
+.markov-table td,
+.emission-matrix-table td,
+.transition-matrix-table td {
+  padding: 0.5rem 0.35rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-200);
+  background: var(--color-neutral-50);
+  transition: background-color 0.2s;
+  min-width: 60px;
+  white-space: nowrap;
+}
+
+.markov-table td:hover,
+.emission-matrix-table td:hover,
+.transition-matrix-table td:hover {
+  background: var(--color-neutral-100);
+}
+
+/* Table Inputs */
+.markov-table input[type="text"],
+.emission-matrix-table input[type="text"],
+.transition-matrix-table input[type="text"] {
+  width: 100%;
+  max-width: 90px;
+  margin: 0;
+  text-align: center;
+  background: #fff;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.2rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.markov-table input[type="text"]:focus,
+.emission-matrix-table input[type="text"]:focus,
+.transition-matrix-table input[type="text"]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+.markov-table input[type="text"]:hover,
+.emission-matrix-table input[type="text"]:hover,
+.transition-matrix-table input[type="text"]:hover {
+  border-color: var(--color-primary-light);
+}
+
+/* Buttons */
+.markov-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.markov-controls button,
+button {
+  border: none;
+  border-radius: 2.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  margin: 0.1rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  text-decoration: none;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.primary-button,
+button[type="submit"],
+.markov-controls button:first-child {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 60%,
+    var(--color-secondary) 100%
+  );
+  color: #fff;
+}
+
+.primary-button:hover,
+button[type="submit"]:hover,
+.markov-controls button:first-child:hover {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.secondary-button,
+button[type="button"],
+.markov-controls button:not(:first-child) {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 60%,
+    var(--color-accent-light) 100%
+  );
+  color: #fff;
+}
+
+.secondary-button:hover,
+button[type="button"]:hover,
+.markov-controls button:not(:first-child):hover {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Feedback and Messages */
+.markov-feedback,
+.feedback-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+  font-weight: 500;
+}
+
+.feedback-success {
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.feedback-error {
+  background: rgba(244, 67, 54, 0.1);
+  border-left-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.feedback-info {
+  background: rgba(67, 97, 238, 0.1);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mt-1 {
+  margin-top: 1rem;
+}
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+
+/* Highlight Classes */
+.highlight-correct {
+  border-color: var(--color-success) !important;
+  background: rgba(76, 175, 80, 0.1) !important;
+}
+
+.highlight-incorrect {
+  border-color: var(--color-error) !important;
+  background: rgba(244, 67, 54, 0.1) !important;
+}
+
+.transition-matrix-header,
+.emission-matrix-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.transition-matrix-header .markov-section-title,
+.emission-matrix-header .markov-section-title {
+  text-align: center;
+  width: 100%;
+  font-size: 1.4em;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+/* Info icon styling similar to word analysis simulation */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  cursor: help;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+}
+
+.info-icon:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.info-icon:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* POS Details Modal Styling */
+.pos-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.pos-modal-content {
+  position: relative;
+  margin: 10vh auto;
+  width: 90%;
+  max-width: 600px;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.pos-modal-header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pos-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.pos-modal-close {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.pos-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pos-modal-body {
+  background: white;
+  padding: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.pos-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-50);
+  border-left: 4px solid var(--color-primary);
+}
+
+.pos-detail-tag {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 3.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.pos-detail-description {
+  color: var(--color-neutral-700);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Message styling */
+.feedback-message,
+.success-message,
+.error-message,
+.info-message {
+  padding: 1em 1.2em;
+  margin: 1em 0;
+  border-radius: var(--radius-md);
+  font-size: 1.05em;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+}
+
+.success-message {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #4caf50;
+  border-left: 4px solid #4caf50;
+}
+
+.error-message {
+  background: #ffeaea;
+  color: #c62828;
+  border: 1px solid #f44336;
+  border-left: 4px solid #f44336;
+}
+
+.info-message {
+  background: var(--color-secondary-light);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-light);
+  border-left: 4px solid var(--color-primary);
+}
+
+.feedback-message {
+  background: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ff9800;
+  border-left: 4px solid #ff9800;
+}
+
+/* Markov-specific elements */
+.markov-sentence {
+  font-size: 1.15em;
+  background: var(--color-neutral-100);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  display: inline-block;
+  border: 1px solid var(--color-primary-light);
+}
+
+.markov-feedback {
+  margin-top: 16px;
+  min-height: 24px;
+  font-size: 1.1em;
+}
+
+.markov-hint {
+  background: var(--color-secondary-light);
+  border-left: 4px solid var(--color-primary);
+  padding: 8px 12px;
+  margin: 10px 0;
+  border-radius: var(--radius-md);
+  font-size: 1em;
+  color: var(--color-primary-dark);
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* Accuracy display */
+#accuracy_ans {
+  color: #2e7d32;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+/* Readonly input styling */
+input[readonly] {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 0.3em 0.7em;
+  margin: 0.2em 0.5em 0.2em 0;
+  border-radius: 4px;
+}
+
+/* DESKTOP OPTIMIZATIONS (>900px) - Dynamic layout features */
+@media (min-width: 901px) {
+  .main-content {
+    width: 95%; /* Increased from 90% to give more overall width */
+    max-width: 1600px; /* Increased max-width for larger screens */
+    padding: 0;
+  }
+
+  #instructions-bar,
+  #instructions-content {
+    width: 100%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Desktop-specific 2-pane layout - Better proportions */
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 2%; /* Reduced gap from 4% to 2% */
+    max-width: none;
+    width: 100%; /* Full width of main-content instead of 80% */
+    margin: 0; /* Remove auto centering, align to left */
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: visible;
+    padding: 0;
+  }
+
+  #left-pane {
+    flex: 0 0 18%; /* Reduced from 24% to 18% */
+    max-width: 18%;
+    min-width: 200px; /* Increased minimum width slightly */
+    width: 18%;
+    margin-left: 0; /* Ensure it's flush left */
+  }
+
+  #right-pane {
+    flex: 0 0 80%; /* Increased from 72% to 80% (18% + 2% + 80% = 100%) */
+    max-width: 80%;
+    min-width: 0;
+    width: 80%;
+    overflow-x: visible;
+  }
+
+  /* Make markov-matrices-section expand to fill right pane */
+  .markov-matrices-section {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Full width of right pane */
+    max-width: 100%;
+    padding: 1rem; /* Restored padding */
+  }
+
+  /* Matrix containers should use full available width */
+  .markov-matrices-section .emission-matrix-container,
+  .markov-matrices-section .transition-matrix-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    box-sizing: border-box;
+  }
+
+  /* Table containers should expand to fit content up to container width */
+  .markov-matrices-section .markov-table-container {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+
+  /* Tables should expand to fit content but not exceed container */
+  .markov-matrices-section .emission-matrix-table,
+  .markov-matrices-section .transition-matrix-table {
+    width: auto; /* Let table size itself based on content */
+    min-width: 100%; /* Ensure minimum full width usage */
+    max-width: 100%;
+    margin: 0 auto;
+    table-layout: auto;
+  }
+
+  /* Ensure table headers get adequate space */
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    min-width: 80px; /* Increased from 60px */
+    max-width: 120px; /* Set a reasonable maximum */
+    padding: 8px 10px; /* Increased horizontal padding */
+    font-size: 0.85rem; /* Slightly smaller font to fit more content */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* First column (POS tags) gets fixed width */
+  .emission-matrix-table th:first-child,
+  .transition-matrix-table th:first-child,
+  .emission-matrix-table td:first-child,
+  .transition-matrix-table td:first-child {
+    min-width: 100px; /* Increased from 80px */
+    width: 100px;
+    max-width: 100px;
+  }
+
+  /* Table cells get better spacing */
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    min-width: 80px; /* Increased from 60px */
+    max-width: 120px;
+    padding: 6px 8px; /* Increased horizontal padding */
+  }
+
+  /* Input fields get more space */
+  .emission-matrix-table input,
+  .transition-matrix-table input {
+    max-width: 80px; /* Increased from 60px */
+    min-width: 60px;
+    padding: 6px 4px; /* Better padding */
+  }
+
+  /* Rest of existing desktop styles... */
+  #instructions-bar {
+    margin: 1.5rem 0;
+    padding: 1rem 2rem;
+  }
+
+  #instructions-content {
+    margin: 0 0 2rem 0;
+    padding: 1.5rem 2rem;
+  }
+
+  .markov-matrices-section .markov-controls {
+    align-self: center;
+    width: fit-content;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  /* Desktop-only: matrix containers in main simulation section */
+  .markov-matrices-section .emission-matrix-container,
+  .markov-matrices-section .transition-matrix-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Desktop-only: section titles inside matrix containers in main simulation section */
+  .markov-matrices-section .emission-matrix-container .markov-section-title,
+  .markov-matrices-section .transition-matrix-container .markov-section-title {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Desktop-only: tables inside matrix containers in main simulation section */
+  .markov-matrices-section .emission-matrix-table,
+  .markov-matrices-section .transition-matrix-table {
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0 auto;
+    table-layout: auto; /* Changed from fixed to auto */
+  }
+
+  /* Desktop-only: table containers inside matrix containers in main simulation section */
+  .markov-matrices-section .markov-table-container {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+}
+
+/* TABLET RESPONSIVE DESIGN (≤900px) */
+@media (max-width: 900px) {
+  .container {
+    width: 100vw;
+    padding: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    padding: 0 0.5rem;
+    margin: 0;
+  }
+
+  #instructions-bar {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.8rem 1rem;
+  }
+
+  #instructions-content {
+    width: 100%;
+    margin: 0 0 1rem 0;
+    padding: 1rem;
+  }
+
+  .instructions-label {
+    font-size: 1.1em;
+  }
+
+  .arrow-icon {
+    font-size: 1.1em;
+  }
+
+  /* Single column layout - override desktop styles */
+  #main-2pane-container {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 0 0.5rem !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+  }
+
+  #left-pane {
+    flex: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    order: 1;
+  }
+
+  #right-pane {
+    flex: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    order: 2;
+    overflow-x: auto !important;
+  }
+
+  /* Adjust section padding */
+  #corpus-selection,
+  #corpus-info {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .markov-matrices-section {
+    padding: 0.8rem !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 0.8rem;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Matrix containers need full width and proper overflow */
+  .emission-matrix-container,
+  .transition-matrix-container {
+    width: 100% !important;
+    max-width: none !important;
+    overflow-x: auto !important;
+    display: block !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  /* Table containers need full width */
+  .markov-table-container {
+    position: relative;
+    overflow-x: auto;
+    width: 100% !important;
+    max-width: none !important;
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  /* Tables need proper mobile sizing */
+  .markov-table,
+  .emission-matrix-table,
+  .transition-matrix-table {
+    width: 100% !important;
+    min-width: 600px;
+    max-width: none !important;
+    table-layout: auto !important;
+  }
+
+  /* Scroll indicator */
+  .markov-table-container::after {
+    content: "← Scroll horizontally to see more →";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--color-neutral-500);
+    opacity: 0.8;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Mobile-specific table styling */
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 8px 6px;
+    font-size: 0.85rem;
+    min-width: 70px;
+  }
+
+  .emission-matrix-table th:first-child,
+  .transition-matrix-table th:first-child {
+    font-size: 0.9rem;
+    padding-left: 10px;
+    min-width: 80px;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+  }
+
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 6px 4px;
+    min-width: 70px;
+  }
+
+  .emission-matrix-table td:first-child,
+  .transition-matrix-table td:first-child {
+    padding-left: 10px;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: var(--color-neutral-100) !important;
+  }
+
+  .emission-matrix-table input,
+  .transition-matrix-table input {
+    padding: 4px 3px;
+    font-size: 0.85rem;
+    min-height: 30px;
+    max-width: 65px;
+  }
+
+  /* Touch-friendly buttons */
+  .markov-controls {
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .markov-controls button,
+  button {
+    min-height: 48px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    margin: 0.2rem;
+  }
+
+  /* Responsive form elements */
+  select,
+  .markov-dropdown {
+    font-size: 16px;
+    padding: 0.8rem 1rem;
+    padding-right: 2.5rem;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    font-size: 16px;
+    padding: 0.6rem 0.3rem;
+  }
+
+  /* Modal adjustments */
+  .pos-modal-content {
+    width: 95%;
+    margin: 5vh auto;
+  }
+
+  .pos-modal-body {
+    max-height: 80vh;
+  }
+
+  .pos-detail-item {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pos-detail-tag {
+    align-self: flex-start;
+    min-width: auto;
+  }
+}
+
+/* MOBILE RESPONSIVE DESIGN (≤600px) */
+@media (max-width: 600px) {
+  .container {
+    width: 100vw;
+    padding: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    padding: 0 0.25rem;
+    margin: 0;
+  }
+
+  #instructions-bar {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin: 0.5rem 0;
+  }
+
+  #instructions-content {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0 0 0.8rem 0;
+  }
+
+  .instructions-label {
+    font-size: 1rem;
+  }
+
+  .arrow-icon {
+    font-size: 1rem;
+  }
+
+  #instructions-content ol {
+    padding-left: 1rem;
+  }
+
+  #instructions-content li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  /* Very compact layout */
+  #main-2pane-container {
+    gap: 0.8rem !important;
+    padding: 0 0.25rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Compact sections */
+  #corpus-selection,
+  #corpus-info,
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 0.6rem;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 0 0.8rem 0 !important;
+  }
+
+  .markov-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  /* Table adjustments for small mobile */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    font-size: 0.8rem;
+    min-width: 500px;
+  }
+
+  .markov-table th,
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 6px 4px;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+
+  .markov-table td,
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 4px 3px;
+    min-width: 60px;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    max-width: 55px;
+    font-size: 14px;
+    padding: 0.3rem 0.2rem;
+  }
+
+  /* Button layout for small screens */
+  .markov-controls {
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    padding: 0;
+  }
+
+  .markov-controls button,
+  button {
+    width: 100%;
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    margin: 0;
+  }
+
+  /* Compact form elements */
+  select,
+  .markov-dropdown {
+    font-size: 16px;
+    padding: 0.6rem 0.8rem;
+    padding-right: 2rem;
+  }
+}
+
+/* SMALL MOBILE RESPONSIVE DESIGN (≤480px) */
+@media (max-width: 480px) {
+  .container {
+    width: 100vw;
+    padding: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    padding: 0 0.1rem;
+    margin: 0;
+  }
+
+  #instructions-bar {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    margin: 0.3rem 0;
+    border-radius: 0.4rem;
+  }
+
+  .instructions-label {
+    font-size: 0.9rem;
+  }
+
+  .arrow-icon {
+    font-size: 0.9rem;
+  }
+
+  #instructions-content {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0 0 0.6rem 0;
+    border-radius: 0 0 0.4rem 0.4rem;
+  }
+
+  #instructions-content li {
+    font-size: 0.8rem;
+  }
+
+  /* Ultra compact layout */
+  #main-2pane-container {
+    gap: 0.6rem !important;
+    padding: 0 0.1rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Ultra compact sections */
+  #corpus-selection,
+  #corpus-info,
+  .markov-matrices-section,
+  .markov-feedback-section,
+  .markov-answers-section {
+    padding: 0.5rem;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 0 0.6rem 0 !important;
+  }
+
+  .markov-section-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Ultra compact tables */
+  .emission-matrix-table,
+  .transition-matrix-table {
+    font-size: 0.7rem;
+    min-width: 400px;
+  }
+
+  .markov-table th,
+  .emission-matrix-table th,
+  .transition-matrix-table th {
+    padding: 4px 2px;
+    font-size: 0.65rem;
+    min-width: 50px;
+  }
+
+  .markov-table td,
+  .emission-matrix-table td,
+  .transition-matrix-table td {
+    padding: 3px 2px;
+    min-width: 50px;
+  }
+
+  .markov-table input[type="text"],
+  .emission-matrix-table input[type="text"],
+  .transition-matrix-table input[type="text"] {
+    max-width: 45px;
+    font-size: 13px;
+    padding: 0.2rem 0.1rem;
+  }
+
+  /* Button pairs for ultra small screens */
+  .markov-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.6rem;
+  }
+
+  .markov-controls button,
+  button {
+    flex: 1 1 calc(50% - 0.15rem);
+    min-width: 0;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.3rem;
+    min-height: 40px;
+  }
+
+  /* Ultra compact form elements */
+  select,
+  .markov-dropdown {
+    font-size: 14px;
+    padding: 0.5rem 0.6rem;
+    padding-right: 1.8rem;
+  }
+}
+
+/* LANDSCAPE ORIENTATION ADJUSTMENTS */
+@media (max-width: 768px) and (orientation: landscape) {
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  #left-pane {
+    flex: 0 0 35%;
+    max-width: 300px;
+  }
+
+  #right-pane {
+    flex: 1;
+  }
+
+  .markov-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .markov-controls button {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 100px;
+  }
+}

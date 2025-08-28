@@ -1,119 +1,141 @@
-A Hidden Markov Model (HMM) is a statistical Markov model in which the system being modeled is assumed to be a Markov process with unobserved (hidden) states.In a regular Markov model (Markov Model (Ref: http://en.wikipedia.org/wiki/Markov_model)), the state is directly visible to the observer, and therefore the state transition probabilities are the only parameters. In a hidden Markov model, the state is not directly visible, but output, dependent on the state, is visible.
+Part-of-Speech (POS) tagging is a fundamental task in Natural Language Processing that assigns grammatical categories to words in a sentence. Hidden Markov Models provide a probabilistic framework for this sequential labeling problem.
 
-<img src="images/hmm.jpg">
+---
 
-Hidden Markov Model has two important components-
+#### 1. Part-of-Speech Tagging
 
-1)Transition Probabilities: The one-step transition probability is the probability of transitioning from one state to another in a single step.
+POS tagging involves assigning grammatical labels (noun, verb, adjective, etc.) to words based on their context and usage in a sentence.
 
-2)Emission Probabilties: : The output probabilities for an observation from state. Emission probabilities B = { b<sub>i,k</sub> = b<sub>i</sub>(o<sub>k</sub>) = P(o<sub>k</sub> | q<sub>i</sub>) }, where o<sub>k</sub> is an Observation. Informally, B is the probability that the output is o<sub>k</sub> given that the current state is q<sub>i</sub>
+#### Example: Contextual Ambiguity
 
-For POS tagging, it is assumed that POS are generated as random process, and each process randomly generates a word. Hence, transition matrix denotes the transition probability from one POS to another and emission matrix denotes the probability that a given word can have a particular POS. Word acts as the observations. Some of the basic assumptions are:
+The word "park" can have different POS tags depending on context:
 
-```
-1. First-order (bigram) Markov assumptions:
-   a. Limited Horizon: Tag depends only on previous tag
-      P(t<sub>i+1</sub> = t<sub>k</sub> | t<sub>1</sub>=t<sub>j1</sub>,.....,t<sub>i</sub>=t<sub>ji</sub>) = P(t<sub>i+1</sub> = t<sub>k</sub> | t<sub>i</sub> = t<sub>j</sub>)
-   b. Time invariance: No change over time
-      P(t<sub>i+1</sub> = t<sub>k</sub> | t<sub>i</sub> = t<sub>j</sub>) = P(t<sub>2</sub> = t<sub>k</sub> | t<sub>1</sub> = t<sub>j</sub>) = P(t<sub>j</sub> -> t<sub>k</sub>)
-2. Output probabilities:
-   - Probability of getting word wk for tag tj: P(wk | tj) is independent of other tags or words!
+- **"The boy is playing in the **park**."** → park/NOUN
+- **"**Park** the car here."** → park/VERB
+- **"We visited **Park** Avenue."** → Park/PROPER_NOUN
 
-```
-### Calculating the Probabilities
+---
 
-####  Consider the given toy corpus
+#### 2. Hidden Markov Model Framework
 
-```
-EOS/eos
-                            They/pronoun
-                            cut/verb
-                            the/determiner
-                            paper/noun
-                            EOS/eos He/pronoun
-                            asked/verb
-                            for/preposition
-                            his/pronoun
-                            cut/noun.
-                            EOS/eos
-                            Put/verb
-                            the/determiner
+An HMM for POS tagging treats the problem as a sequence labeling task where:
 
-                            paper/noun
-                            in/preposition
-                            the/determiner
-                            cut/noun
-                            EOS/eos
+- **Hidden States**: POS tags (NOUN, VERB, ADJ, DET, etc.)
+- **Observations**: Words in the sentence
+- **Goal**: Find the most likely sequence of tags for a given sentence
 
-```
+---
 
-###  Calculating Emission Probability Matrix
+#### 3. HMM Components
 
-Count the no. of times a specific word occus with a specific POS tag in the corpus.</br>
-Here, say for **"cut"**
+#### **Transition Probabilities (A)**
 
-```
-count(cut,verb)=1 
-count(cut,noun)=2 
-count(cut,determiner)=0 
-```
+The probability of moving from one POS tag to another:
 
-and so on zero for other tags too.
+**A = {a<sub>i,j</sub> = P(tag<sub>j</sub> | tag<sub>i</sub>)}**
 
+Example: P(NOUN | DET) = 0.7 (high probability that a noun follows a determiner)
+
+#### **Emission Probabilities (B)**
+
+The probability of observing a word given a POS tag:
+
+**B = {b<sub>i,k</sub> = P(word<sub>k</sub> | tag<sub>i</sub>)}**
+
+Example: P("the" | DET) = 0.6 (high probability that "the" is a determiner)
+
+#### **Initial State Distribution (π)**
+
+The probability distribution over starting POS tags:
+
+**π = {π<sub>i</sub> = P(tag<sub>1</sub> = i)}**
+
+---
+
+#### 4. Training the HMM
+
+#### **From Annotated Corpus**
+
+Given a corpus with words tagged with their POS labels:
 
 ```
-count(cut) = total count of cut = 3
+They/PRON cut/VERB the/DET paper/NOUN ./PUNCT
+He/PRON asked/VERB for/PREP his/PRON cut/NOUN ./PUNCT
 ```
 
-Now, calculating the probability</br>
-Probability to be filled in the matrix cell at the intersection of cut and verb</br>
+#### **Calculating Emission Probabilities**
+
+For word "cut":
+
+- count(cut, VERB) = 1
+- count(cut, NOUN) = 1
+- count(VERB) = 2
+
+**P(cut | VERB) = count(cut, VERB) / count(VERB) = 1/2 = 0.5**
+
+#### **Calculating Transition Probabilities**
+
+For tag sequence "VERB → DET":
+
+- count(VERB, DET) = 1
+- count(VERB) = 2
+
+**P(DET | VERB) = count(VERB, DET) / count(VERB) = 1/2 = 0.5**
+
+---
+
+#### 5. The Viterbi Algorithm
+
+The Viterbi algorithm finds the most likely sequence of POS tags using dynamic programming.
+
+#### **Algorithm Steps**
+
+1. **Initialization**: Calculate initial probabilities for first word
+2. **Forward Pass**: For each word, find best path to each possible tag
+3. **Backtracking**: Trace back the optimal path
+
+#### **Mathematical Formulation**
+
+**δ<sub>t</sub>(i)** = probability of best path ending in state i at time t
 
 ```
-P(cut/verb)=count(cut,verb)/count(cut)=1/3=0.33
+δ₁(i) = π(i) × P(word₁ | tag_i)
+δₜ(j) = max[δₜ₋₁(i) × P(tag_j | tag_i)] × P(wordₜ | tag_j)
 ```
 
-Similarly,</br>
-Probability to be filled in the cell at he intersection of cut and determiner
+---
 
-```
-P(cut/determiner)=count(cut,determiner)/count(cut)=0/3=0
-```
+#### 6. Key Assumptions
 
- Repeat the same for all the word-tag combination and fill the
+#### **Markov Assumption**
 
-###  Calculating Transition Probability Matrix
+Current tag depends only on the previous tag, not the entire history.
 
-Count the no. of times a specific tag comes after other POS tags in the corpus.</br>
-Here, say for **"determiner"**
+#### **Independence Assumption**
 
-```
-count(verb,determiner)=2 
-count(preposition,determiner)=1 
-count(determiner,determiner)=0 
-count(eos,determiner)=0 
-count(noun,determiner)=0 
-```
+Word emission depends only on the current tag, not on other words or tags.
 
-and so on zero for other tags too.
+---
 
-```
-count(determiner) = total count of tag 'determiner' = 3
-```
+#### 7. Practical Applications
 
-Now, calculating the probability
-Probability to be filled in the cell at he intersection of determiner(in the column) and verb(in the row)
+- **Text Processing**: Preprocessing for parsing and information extraction
+- **Machine Translation**: Understanding grammatical structure for translation
+- **Information Retrieval**: Improving search through grammatical analysis
+- **Speech Recognition**: Disambiguating spoken words with multiple meanings
 
-```
-P(determiner/verb)=count(verb,determiner)/count(determiner)=2/3=0.66
-```
+---
 
-Similarly,</br>
-Probability to be filled in the cell at he intersection of determiner(in the column) and noun(in the row)
+#### 8. Advantages and Limitations
 
-```
-P(determiner/noun)=count(noun,determiner)/count(determiner)=0/3=0
-```
+#### **Advantages**
 
-Repeat the same for all the tags
+- Handles ambiguous words through context
+- Trainable from annotated data
+- Efficient computation with Viterbi algorithm
 
-Note: **EOS**/eos is a special marker which represents ***End Of Sentence***.
+#### **Limitations**
+
+- Limited to bigram dependencies
+- Assumes independence of word emissions
+- Requires sufficient training data for accuracy

@@ -150,34 +150,11 @@ body {
   font-size: 1rem;
   color: var(--color-primary-dark);
   transition: transform 0.3s ease;
-  transform: rotate(180deg); /* Default state: up arrow when expanded */
+  transform: rotate(0deg); /* Default state: down arrow when collapsed */
 }
 
 .arrow-icon.rotated {
-  transform: rotate(0deg); /* Rotated state: down arrow when collapsed */
-}
-
-#instructions-content {
-  width: 100%;
-  margin: 0 auto 1.5rem auto;
-  background: #fff;
-  border: 1px solid var(--color-neutral-200);
-  border-top: none;
-  border-radius: 0;
-  padding: 1rem 1.5rem;
-  box-shadow: var(--shadow-md);
-  display: none;
-}
-
-#instructions-content ol {
-  margin: 0;
-  padding-left: 1.2rem;
-  line-height: 1.6;
-}
-
-#instructions-content li {
-  margin-bottom: 0.6rem;
-  color: var(--color-neutral-800);
+  transform: rotate(180deg); /* Rotated state: up arrow when expanded */
 }
 
 /* Main Layout - Base styles for mobile/tablet */

@@ -1,6 +1,17 @@
-**1.** Consider the sentence "They can fish in the can." Identify the ambiguous words and list all possible POS tags for each ambiguous word. Explain how context helps determine the correct POS sequence.
+### 1. Ambiguity in POS Tagging
 
-**2.** Given the following training corpus, calculate the emission and transition probabilities:
+**Sentence:**
+
+> They can fish in the can.
+
+- **Task:** Identify ambiguous words and list all possible POS tags for each.
+- **Explain:** How does context help determine the correct POS sequence?
+
+---
+
+### 2. Emission and Transition Probabilities
+
+**Training Corpus:**
 
 | Sentence                                  |
 | ----------------------------------------- |
@@ -9,13 +20,32 @@
 | The/DET cat/NOUN barks/VERB               |
 | Dogs/NOUN sleep/VERB                      |
 
-A. Calculate P(dog | NOUN) and P(cat | NOUN)
+**Questions:**
 
-B. Calculate P(VERB | NOUN) and P(ADV | VERB)
+**A.** Calculate:
 
-C. Which transition is more likely: NOUN → VERB or VERB → ADV?
+- P(dog | NOUN)
+- P(cat | NOUN)
 
-**3.** Apply the Viterbi algorithm to find the most likely POS tag sequence for the sentence "The dog sleeps" using these probability matrices:
+**B.** Calculate:
+
+- P(VERB | NOUN)
+- P(ADV | VERB)
+
+**C.** Which transition is more likely:
+
+- NOUN → VERB
+- VERB → ADV?
+
+---
+
+### 3. Viterbi Algorithm Application
+
+**Sentence:**
+
+> The dog sleeps
+
+**Probability Matrices:**
 
 **Transition Probabilities:**
 
@@ -29,31 +59,44 @@ C. Which transition is more likely: NOUN → VERB or VERB → ADV?
 - P(dog | NOUN) = 0.4
 - P(sleeps | VERB) = 0.5
 
-Show your step-by-step calculations.
+**Task:**  
+Show your step-by-step calculations to find the most likely POS tag sequence using the Viterbi algorithm.
 
-**4.** Refer to the following POS-tagged sentences and answer the questions below:
+---
 
-    Sentence 1: I/PRON will/AUX park/VERB the/DET car/NOUN
+### 4. POS Tag Ambiguity
 
-    Sentence 2: The/DET park/NOUN is/VERB beautiful/ADJ
+**POS-tagged Sentences:**
 
-    Sentence 3: Park/PROPN Avenue/PROPN is/VERB busy/ADJ
+<pre>
+Sentence 1: I/PRON will/AUX park/VERB the/DET car/NOUN
+Sentence 2: The/DET park/NOUN is/VERB beautiful/ADJ
+Sentence 3: Park/PROPN Avenue/PROPN is/VERB busy/ADJ
+</pre>
 
-Are there any words that appear with different POS tags? How does an HMM handle such ambiguities?
+- **Task:** Are there any words that appear with different POS tags?
+- **Explain:** How does an HMM handle such ambiguities?
 
-**5.** Design a simple HMM for the following mini-tagset and calculate the required probabilities from this training data:
+---
 
-**Tagset:** {DET, NOUN, VERB}
+### 5. HMM Design and Probability Calculation
 
-**Training sentences:**
+**Mini Tagset:**  
+{DET, NOUN, VERB}
+
+**Training Sentences:**
 
 - The/DET boy/NOUN runs/VERB
 - A/DET girl/NOUN walks/VERB
 - The/DET dog/NOUN sleeps/VERB
 - The/DET cat/NOUN jumps/VERB
 
-Calculate:
+**Tasks:**
 
-- All transition probabilities A = {a<sub>i,j</sub>}
-- All emission probabilities for the word "the"
-- Initial state probabilities π = {π<sub>i</sub>}
+- Calculate all transition probabilities:  
+  A = {a<sub>i,j</sub>}
+- Calculate all emission probabilities for the word "the"
+- Calculate initial state probabilities:  
+  π = {π<sub>i</sub>}
+
+---

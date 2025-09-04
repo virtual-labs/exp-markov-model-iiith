@@ -91,21 +91,3 @@ If the simulation includes interactive matrix calculation:
 2. **Compare Algorithms**: If multiple algorithms are available, compare their performance
 3. **Error Analysis**: Identify common tagging errors and understand their causes
 4. **Performance Evaluation**: Analyze accuracy and efficiency metrics
-
-### Learning Outcomes
-
-By completing this procedure, you will:
-
-- Understand how HMMs work for POS tagging
-- Learn to calculate transition and emission probabilities
-- Experience the Viterbi algorithm in action
-- Recognize the importance of context in disambiguation
-- Appreciate the challenges and limitations of statistical NLP approaches
-
-### Tips for Success
-
-- **Take Time to Understand**: Don't rush through the matrices; understanding the probabilities is crucial
-- **Experiment Actively**: Try different sentences to see how the algorithm responds
-- **Pay Attention to Ambiguity**: Focus on how ambiguous words are resolved
-- **Connect Theory to Practice**: Relate what you see in the simulation to the theoretical concepts
-- **Ask Questions**: Consider why certain tagging decisions are made and explore edge cases

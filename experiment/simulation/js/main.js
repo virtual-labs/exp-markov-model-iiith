@@ -75,42 +75,26 @@ function renderCorpusInfo() {
 }
 
 function renderSimulation() {
-  console.log("renderSimulation called");
-  console.log("corpusData:", typeof corpusData, corpusData);
-  console.log("currentCorpusKey:", currentCorpusKey); // or whatever variable you use to select the corpus
+  //console.log("renderSimulation called");
+  //console.log("corpusData:", typeof corpusData, corpusData);
+  //console.log("currentCorpusKey:", currentCorpusKey); // or whatever variable you use to select the corpus
   const corpus = corpusData[currentCorpusKey];
-  console.log("corpus:", corpus);
+  //console.log("corpus:", corpus);
   if (!corpus) {
     console.error("Corpus not found for name:", currentCorpusKey);
     return;
   }
-  console.log("emission_matrix:", corpus.emission_matrix);
-  console.log(
-    "emission_matrix.length:",
-    corpus.emission_matrix ? corpus.emission_matrix.length : "undefined"
-  );
-  console.log("pos:", corpus.pos);
-  console.log("pos.length:", corpus.pos ? corpus.pos.length : "undefined");
-  console.log("words:", corpus.words);
-  console.log(
-    "words.length:",
-    corpus.words ? corpus.words.length : "undefined"
-  );
-  console.log(
-    "Should be:",
-    corpus.pos && corpus.words
-      ? corpus.pos.length * corpus.words.length
-      : "undefined"
-  );
-  console.log("transition_matrix:", corpus.transition_matrix);
-  console.log(
-    "transition_matrix.length:",
-    corpus.transition_matrix ? corpus.transition_matrix.length : "undefined"
-  );
-  console.log(
-    "Should be:",
-    corpus.pos ? corpus.pos.length * corpus.pos.length : "undefined"
-  );
+  //console.log("emission_matrix:", corpus.emission_matrix);
+  //console.log("emission_matrix.length:", corpus.emission_matrix ? corpus.emission_matrix.length : "undefined");
+  //console.log("pos:", corpus.pos);
+  //console.log("pos.length:", corpus.pos ? corpus.pos.length : "undefined");
+  //console.log("words:", corpus.words);
+  //console.log("words.length:",corpus.words ? corpus.words.length : "undefined");
+  //console.log("Should be:",corpus.pos && corpus.words? corpus.pos.length * corpus.words.length: "undefined");
+  //console.log("transition_matrix:", corpus.transition_matrix);
+  //console.log("transition_matrix.length:",corpus.transition_matrix ? corpus.transition_matrix.length : "undefined");
+  //console.log("Should be:",corpus.pos ? corpus.pos.length * corpus.pos.length : "undefined");
+
   const matricesContainer = document.getElementById("markov-matrices");
   currentCorpus = corpus;
   // Reset user input
@@ -445,10 +429,10 @@ function adjustLayoutForTableWidth() {
     rightPane.style.overflow = "visible";
 
     // Log dimensions for debugging
-    console.log("Container width:", container.offsetWidth);
-    console.log("Left pane width:", leftPane.offsetWidth);
-    console.log("Right pane width:", rightPane.offsetWidth);
-    console.log("Right pane scroll width:", rightPane.scrollWidth);
+    //console.log("Container width:", container.offsetWidth);
+    //console.log("Left pane width:", leftPane.offsetWidth);
+    //console.log("Right pane width:", rightPane.offsetWidth);
+    //console.log("Right pane scroll width:", rightPane.scrollWidth);
   }, 50);
 }
 
@@ -475,27 +459,18 @@ function ensureRightPaneContainment() {
       matrixContainer.style.overflow = "visible";
 
       // Log container dimensions for debugging
-      console.log("Matrix container width:", matrixContainer.offsetWidth);
-      console.log(
-        "Matrix container scroll width:",
-        matrixContainer.scrollWidth
-      );
-      console.log("Table width:", table.offsetWidth);
-      console.log("Table scroll width:", table.scrollWidth);
+      //console.log("Matrix container width:", matrixContainer.offsetWidth);
+      //console.log("Matrix container scroll width:",matrixContainer.scrollWidth);
+      //console.log("Table width:", table.offsetWidth);
+      //console.log("Table scroll width:", table.scrollWidth);
     }
   });
 
   // Don't override CSS flexbox values, just ensure overflow is handled
   rightPane.style.overflow = "visible";
 
-  console.log(
-    "Right pane computed width:",
-    window.getComputedStyle(rightPane).width
-  );
-  console.log(
-    "Right pane max-width:",
-    window.getComputedStyle(rightPane).maxWidth
-  );
+  //console.log("Right pane computed width:",window.getComputedStyle(rightPane).width);
+  //console.log("Right pane max-width:",window.getComputedStyle(rightPane).maxWidth);
 }
 
 // Call layout adjustment when tables are updated
@@ -645,21 +620,26 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize instructions bar to be collapsed by default (hidden)
   const instructionsContent = document.getElementById("instructions-content");
   const instructionsArrow = document.getElementById("instructions-arrow");
+  const instructionsBar = document.getElementById("instructions-bar");
 
-  if (instructionsContent) {
-    instructionsContent.style.display = "none"; // Hide by default (collapsed)
+  // Always start collapsed (hidden) and arrow down
+  if (instructionsContent) instructionsContent.style.display = "none";
+
+  if (instructionsBar && instructionsArrow && instructionsContent) {
+    instructionsBar.onclick = function () {
+      if (
+        instructionsContent.style.display === "none" ||
+        instructionsContent.style.display === ""
+      ) {
+        instructionsContent.style.display = "block";
+        instructionsArrow.classList.remove("rotated"); // Arrow up (expanded)
+      } else {
+        instructionsContent.style.display = "none";
+        instructionsArrow.classList.add("rotated"); // Arrow down (collapsed)
+      }
+    };
+    instructionsArrow.onclick = instructionsBar.onclick;
   }
-
-  if (instructionsArrow) {
-    instructionsArrow.classList.add("rotated"); // Arrow points down when collapsed
-  }
-
-  // Also use jQuery to ensure it's hidden (failsafe)
-  $(document).ready(function () {
-    $("#instructions-content").hide(); // Make sure it's hidden by default (collapsed)
-    $("#instructions-arrow").addClass("rotated"); // Arrow points down when collapsed
-  });
-
   loadCorpus(currentCorpusKey);
 });
 

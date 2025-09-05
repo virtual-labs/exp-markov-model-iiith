@@ -58,10 +58,10 @@ The probability distribution over starting POS tags:
 
 Given a corpus with words tagged with their POS labels:
 
-```
+<pre>
 They/PRON cut/VERB the/DET paper/NOUN ./PUNCT
 He/PRON asked/VERB for/PREP his/PRON cut/NOUN ./PUNCT
-```
+</pre>
 
 #### **Calculating Emission Probabilities**
 
@@ -98,10 +98,10 @@ The Viterbi algorithm finds the most likely sequence of POS tags using dynamic p
 
 **δ<sub>t</sub>(i)** = probability of best path ending in state i at time t
 
-```
+<pre>
 δ₁(i) = π(i) × P(word₁ | tag_i)
 δₜ(j) = max[δₜ₋₁(i) × P(tag_j | tag_i)] × P(wordₜ | tag_j)
-```
+</pre>
 
 ---
 

@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What is the primary purpose of Part-of-Speech (POS) tagging in natural language processing?",
+      "answers": {
+        "a": "To count the number of words in a sentence",
+        "b": "To assign grammatical categories like noun, verb, adjective to each word",
+        "c": "To translate words between languages",
+        "d": "To identify the meaning of words"
+      },
+      "explanations": {
+        "a": "Incorrect. Word counting is a simple task that doesn't require POS tagging.",
+        "b": "Correct! POS tagging assigns grammatical categories to each word in a sentence, which is essential for understanding sentence structure.",
+        "c": "Incorrect. Translation is a different NLP task that may use POS information but isn't the primary purpose of POS tagging.",
+        "d": "Incorrect. Meaning identification is semantic analysis, while POS tagging focuses on grammatical categories."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In a Hidden Markov Model, what are the 'hidden' states?",
+      "answers": {
+        "a": "The words in the sentence",
+        "b": "The POS tags that we want to predict",
+        "c": "The probabilities in the model",
+        "d": "The training data"
+      },
+      "explanations": {
+        "a": "Incorrect. Words are the observations, not the hidden states.",
+        "b": "Correct! In HMM for POS tagging, the hidden states are the POS tags that we cannot directly observe but want to predict.",
+        "c": "Incorrect. Probabilities are parameters of the model, not the hidden states.",
+        "d": "Incorrect. Training data is used to learn the model parameters, not the hidden states."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does the word 'Markov' refer to in Hidden Markov Models?",
+      "answers": {
+        "a": "The assumption that future states depend only on the current state",
+        "b": "The name of the algorithm used",
+        "c": "The type of probability distribution used",
+        "d": "The language being processed"
+      },
+      "explanations": {
+        "a": "Correct! The Markov assumption states that the probability of the next state depends only on the current state, not on the entire history.",
+        "b": "Incorrect. Markov refers to the mathematical property, not an algorithm name.",
+        "c": "Incorrect. Markov refers to the independence assumption, not a specific probability distribution.",
+        "d": "Incorrect. Markov property is language-independent."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What are emission probabilities in an HMM for POS tagging?",
+      "answers": {
+        "a": "The probability of one POS tag following another",
+        "b": "The probability of a word being generated given a POS tag",
+        "c": "The probability of starting a sentence with a particular POS tag",
+        "d": "The probability of ending a sentence with a particular POS tag"
+      },
+      "explanations": {
+        "a": "Incorrect. This describes transition probabilities, not emission probabilities.",
+        "b": "Correct! Emission probabilities P(word|tag) represent the likelihood of observing a particular word given a specific POS tag.",
+        "c": "Incorrect. This describes initial state probabilities.",
+        "d": "Incorrect. This would be part of the transition probabilities to an end state."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Why is context important in POS tagging?",
+      "answers": {
+        "a": "Because words always have only one possible POS tag",
+        "b": "Because many words can have multiple POS tags depending on context",
+        "c": "Because it makes the algorithm faster",
+        "d": "Because it reduces the vocabulary size"
+      },
+      "explanations": {
+        "a": "Incorrect. Many words are ambiguous and can have multiple POS tags.",
+        "b": "Correct! Context is crucial because words like 'run' can be a noun or verb, and 'can' can be a modal verb or noun, depending on the surrounding words.",
+        "c": "Incorrect. Context consideration actually makes the algorithm more complex, not faster.",
+        "d": "Incorrect. Context doesn't affect vocabulary size."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In the calculation P(tag₂|tag₁) = count(tag₁, tag₂) / count(tag₁), what does this represent?",
+      "answers": {
+        "a": "Emission probability",
+        "b": "Transition probability",
+        "c": "Initial probability",
+        "d": "Final probability"
+      },
+      "explanations": {
+        "a": "Incorrect. Emission probabilities involve words and tags, not just tags.",
+        "b": "Correct! This formula calculates the transition probability - the likelihood of tag₂ following tag₁ in a sequence.",
+        "c": "Incorrect. Initial probabilities involve the probability of starting with a particular tag.",
+        "d": "Incorrect. There's no standard concept of 'final probability' in HMMs."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is the main advantage of using statistical methods like HMMs over hand-crafted rules for POS tagging?",
+      "answers": {
+        "a": "They are always 100% accurate",
+        "b": "They can automatically learn patterns from data and handle ambiguity",
+        "c": "They require less computational resources",
+        "d": "They work only with English language"
+      },
+      "explanations": {
+        "a": "Incorrect. No POS tagging method is 100% accurate; statistical methods can make errors.",
+        "b": "Correct! Statistical methods can learn from large datasets and handle ambiguous cases better than rigid hand-crafted rules.",
+        "c": "Incorrect. Statistical methods often require more computational resources during training.",
+        "d": "Incorrect. Statistical methods can work with any language given appropriate training data."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "In the Viterbi algorithm, what does dynamic programming help achieve?",
+      "answers": {
+        "a": "It reduces the search space by storing optimal subproblem solutions",
+        "b": "It increases the accuracy of the model",
+        "c": "It handles unknown words better",
+        "d": "It improves the training speed"
+      },
+      "explanations": {
+        "a": "Correct! Dynamic programming in Viterbi algorithm stores the best paths to each state, avoiding redundant calculations and making the search efficient.",
+        "b": "Incorrect. Dynamic programming is about efficiency, not accuracy improvement.",
+        "c": "Incorrect. Handling unknown words is a separate problem from the algorithmic efficiency.",
+        "d": "Incorrect. Viterbi algorithm is used for decoding/tagging, not training."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is a major limitation of first-order HMMs for POS tagging?",
+      "answers": {
+        "a": "They cannot handle any ambiguous words",
+        "b": "They assume the next tag depends only on the current tag, not on longer contexts",
+        "c": "They require too much training data",
+        "d": "They only work with short sentences"
+      },
+      "explanations": {
+        "a": "Incorrect. First-order HMMs can handle ambiguous words to some extent using probabilities.",
+        "b": "Correct! First-order HMMs only consider the immediately previous tag, which may not capture longer-range dependencies needed for accurate tagging.",
+        "c": "Incorrect. While more data helps, this isn't the primary limitation of first-order models.",
+        "d": "Incorrect. Sentence length is not a fundamental limitation of first-order HMMs."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    }
+  ]
+}

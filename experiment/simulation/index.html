@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -40,36 +40,38 @@
           <div id="instructions-content" class="instructions-content">
             <ol style="margin: 0; padding-left: 20px">
               <li>
-                Select a corpus from the dropdown menu. By default, 'Corpus A'
-                is selected and loaded.
+                Select a corpus from the dropdown menu. The simulation loads
+                that corpus's tagged training sentence immediately.
               </li>
               <li>
-                Observe the displayed transition and emission probabilities
-                computed from the training data.
+                Use the training sentence in the left pane to compute
+                probabilities manually.
               </li>
               <li>
-                Enter probability values for each state transition and emission
-                in the Markov model simulation. All input fields are available
-                at once.
+                Fill all cells in both matrices:
+                <strong>Emission</strong> as P(word | POS) and
+                <strong>Transition</strong> as P(next POS | current POS).
+              </li>
+              <li>
+                Enter exactly <strong>one numeric probability per cell</strong>
+                (between 0 and 1). Text, alphabets, formulas, or multiple values
+                in a single cell are not allowed.
               </li>
               <li>
                 Click the "Check" button to validate your answers. Correct
-                values are retained; incorrect ones can be revised. Feedback is
-                provided for each attempt.
+                values are highlighted in green, incorrect ones in red.
               </li>
               <li>
-                If you need help, click "Show Hint" for guidance. To see the
-                correct answers and compare them with your input, click "Show
-                Answer" (only after entering your answers).
+                If you need help, click "Show Hint" for guidance. Use "Show
+                Answer" after attempting at least one value.
               </li>
               <li>
                 Once all answers are correct, the simulation displays the final
-                probability calculations and results.
+                success feedback.
               </li>
               <li>
-                To start over or switch to a different corpus, use the "Reset"
-                button (which always resets to Corpus A) or select a new corpus
-                from the dropdown.
+                To start over, click "Reset" (it reloads Corpus A), or choose
+                another corpus from the dropdown.
               </li>
             </ol>
           </div>

@@ -17,14 +17,66 @@ function formatCorpusText(text) {
   return formatted;
 }
 
-// Utility: calculator function to evaluate mathematical expressions
-function calculator(str) {
-  try {
-    str = str.replace(/\s/g, ""); // Remove spaces
-    return eval(str);
-  } catch (e) {
-    return null;
-  }
+// Parse exactly one probability value from a cell.
+// Allowed formats: 0, 0.25, 1, 1.0, .5 (single value only, range 0..1).
+function parseProbabilityInput(str) {
+  const text = String(str ?? "").trim();
+  if (!text) return null;
+
+  const singleValuePattern = /^(?:0(?:\.\d+)?|1(?:\.0+)?|\.\d+)$/;
+  if (!singleValuePattern.test(text)) return null;
+
+  const value = Number(text);
+  if (!Number.isFinite(value) || value < 0 || value > 1) return null;
+  return value;
+}
+
+function attachInputGuards() {
+  const inputs = document.querySelectorAll(
+    ".emission-input, .transition-input",
+  );
+  const controlKeys = new Set([
+    "Backspace",
+    "Delete",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+    "Home",
+    "End",
+  ]);
+
+  inputs.forEach((input) => {
+    input.setAttribute("inputmode", "decimal");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("placeholder", "0-1");
+
+    input.addEventListener("keydown", (event) => {
+      if (event.ctrlKey || event.metaKey) return;
+      if (controlKeys.has(event.key)) return;
+
+      if (event.key === ".") {
+        if (input.value.includes(".")) {
+          event.preventDefault();
+        }
+        return;
+      }
+
+      if (!/^[0-9]$/.test(event.key)) {
+        event.preventDefault();
+      }
+    });
+
+    input.addEventListener("paste", (event) => {
+      const pasted = (event.clipboardData || window.clipboardData).getData(
+        "text",
+      );
+      if (parseProbabilityInput(pasted) === null) {
+        event.preventDefault();
+      }
+    });
+  });
 }
 
 // HMM Experiment JavaScript Functions (Three-pane layout)
@@ -33,6 +85,82 @@ let currentCorpusKey = "corpus1";
 let currentCorpus = null;
 let userEmission = [];
 let userTransition = [];
+
+function parseTaggedTokens(corpusText) {
+  return corpusText
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length > 0)
+    .map((token) => {
+      const slashIdx = token.lastIndexOf("/");
+      if (slashIdx <= 0 || slashIdx >= token.length - 1) {
+        return null;
+      }
+      return {
+        word: token.slice(0, slashIdx),
+        tag: token.slice(slashIdx + 1),
+      };
+    })
+    .filter((item) => item !== null);
+}
+
+function buildProbabilityMatrices(corpus) {
+  const tokens = parseTaggedTokens(corpus.text || "");
+  const posIndex = {};
+  const wordIndex = {};
+
+  corpus.pos.forEach((tag, idx) => {
+    posIndex[tag] = idx;
+  });
+  corpus.words.forEach((word, idx) => {
+    wordIndex[word] = idx;
+  });
+
+  const emissionCounts = Array(corpus.pos.length * corpus.words.length).fill(0);
+  const transitionCounts = Array(corpus.pos.length * corpus.pos.length).fill(0);
+  const tagTotals = Array(corpus.pos.length).fill(0);
+  const transitionFromTotals = Array(corpus.pos.length).fill(0);
+
+  for (let i = 0; i < tokens.length; i++) {
+    const current = tokens[i];
+    const row = posIndex[current.tag];
+    const col = wordIndex[current.word];
+
+    if (row !== undefined && col !== undefined) {
+      emissionCounts[row * corpus.words.length + col] += 1;
+      tagTotals[row] += 1;
+    }
+
+    if (i < tokens.length - 1) {
+      const next = tokens[i + 1];
+      const fromIdx = posIndex[current.tag];
+      const toIdx = posIndex[next.tag];
+      if (fromIdx !== undefined && toIdx !== undefined) {
+        transitionCounts[fromIdx * corpus.pos.length + toIdx] += 1;
+        transitionFromTotals[fromIdx] += 1;
+      }
+    }
+  }
+
+  const emissionProb = emissionCounts.map((count, idx) => {
+    const row = Math.floor(idx / corpus.words.length);
+    const denom = tagTotals[row];
+    return denom > 0 ? count / denom : 0;
+  });
+
+  const transitionProb = transitionCounts.map((count, idx) => {
+    const row = Math.floor(idx / corpus.pos.length);
+    const denom = transitionFromTotals[row];
+    return denom > 0 ? count / denom : 0;
+  });
+
+  return {
+    ...corpus,
+    emission_matrix: emissionProb,
+    transition_matrix: transitionProb,
+    tokens,
+  };
+}
 
 function renderCorpusSelection() {
   const select = document.createElement("select");
@@ -57,16 +185,10 @@ function renderCorpusSelection() {
 
 function renderCorpusInfo() {
   const infoDiv = document.getElementById("corpus-info");
-  // Use distinct, longer, and more natural example sentences for each corpus
-  let sentence = "";
-  if (currentCorpusKey === "corpus1") {
-    sentence = "The quick brown fox jumps over the lazy dog in the park.";
-  } else if (currentCorpusKey === "corpus2") {
-    sentence = "A group of students are reading books quietly in the library.";
-  } else if (currentCorpusKey === "corpus3") {
-    sentence =
-      "During the summer holidays, children play football every evening near the river.";
-  }
+  const corpus = corpusData[currentCorpusKey];
+  const sentence = parseTaggedTokens(corpus.text || "")
+    .map((token) => token.word)
+    .join(" ");
   infoDiv.innerHTML =
     '<div class="markov-section-title">Training Sentence:</div>' +
     '<div class="markov-sentence">' +
@@ -78,7 +200,7 @@ function renderSimulation() {
   //console.log("renderSimulation called");
   //console.log("corpusData:", typeof corpusData, corpusData);
   //console.log("currentCorpusKey:", currentCorpusKey); // or whatever variable you use to select the corpus
-  const corpus = corpusData[currentCorpusKey];
+  const corpus = buildProbabilityMatrices(corpusData[currentCorpusKey]);
   //console.log("corpus:", corpus);
   if (!corpus) {
     console.error("Corpus not found for name:", currentCorpusKey);
@@ -165,19 +287,18 @@ function generateEditableEmissionMatrix(corpus) {
     html += "<td><b>" + word + "</b></td>";
   });
   html += "</tr>";
-  for (let i = 1; i < corpus.pos.length; i++) {
-    // skip 'eos'
+  for (let i = 0; i < corpus.pos.length; i++) {
     html += "<tr><td><b>" + corpus.pos[i] + "</b></td>";
     for (let j = 0; j < corpus.words.length; j++) {
-      const idx = (i - 1) * corpus.words.length + j;
+      const idx = i * corpus.words.length + j;
       html +=
         '<td><input type="text" id="e' +
         idx +
         '" class="emission-input" data-row="' +
-        (i - 1) +
+        i +
         '" data-col="' +
         j +
-        '" value="" /></td>';
+        '" maxlength="6" value="" /></td>';
     }
     html += "</tr>";
   }
@@ -214,7 +335,10 @@ function generateEditableTransitionMatrix(corpus) {
         i +
         '" data-col="' +
         j +
-        '" value="" /></td>';
+        '" maxlength="6" value="" /></td>';
+
+      // Enforce one numeric probability per cell by input design.
+      attachInputGuards();
     }
     html += "</tr>";
   }
@@ -244,19 +368,19 @@ function checkMatrices() {
   const corpus = currentCorpus;
   let emissionOk = true,
     transitionOk = true;
-  // Check emission (skip first POS tag like in generation)
-  for (let i = 1; i < corpus.pos.length; i++) {
+  // Check all emission rows
+  for (let i = 0; i < corpus.pos.length; i++) {
     for (let j = 0; j < corpus.words.length; j++) {
-      const idx = (i - 1) * corpus.words.length + j;
+      const idx = i * corpus.words.length + j;
       const input = document.getElementById("e" + idx);
       if (!input) {
         console.error("Element not found: e" + idx);
         continue;
       }
       const val = input.value.trim();
-      userEmission[i * corpus.words.length + j] = val;
+      userEmission[idx] = val;
       const correct = corpus.emission_matrix[i * corpus.words.length + j];
-      const calc = calculator(val);
+      const calc = parseProbabilityInput(val);
       if (calc === null || isNaN(calc) || Math.abs(calc - correct) > 0.01) {
         input.style.backgroundColor = "#FFB3B3";
         emissionOk = false;
@@ -272,7 +396,7 @@ function checkMatrices() {
     const val = input.value.trim();
     userTransition[i] = val;
     const correct = corpus.transition_matrix[i];
-    const calc = calculator(val);
+    const calc = parseProbabilityInput(val);
     if (calc === null || isNaN(calc) || Math.abs(calc - correct) > 0.01) {
       input.style.backgroundColor = "#FFB3B3";
       transitionOk = false;
@@ -305,17 +429,27 @@ function showAnswer() {
   // Hide other sections first to ensure mutual exclusivity
   hideAllOutputSections();
 
-  const corpus = corpusData[currentCorpusKey];
+  const corpus = currentCorpus;
+  const hasAnyInput =
+    userEmission.some((value) => String(value).trim() !== "") ||
+    userTransition.some((value) => String(value).trim() !== "");
+
+  if (!hasAnyInput) {
+    const feedbackDiv = document.getElementById("markov-feedback");
+    feedbackDiv.innerHTML =
+      '<div class="error-message">Enter at least one value before using Show Answer.</div>';
+    feedbackDiv.style.display = "block";
+    return;
+  }
+
   let html = "";
   html += '<div class="emission-matrix-container">';
   html += '<div class="markov-section-title">Correct Emission Matrix</div>';
-  // Skip the first POS tag's data (first corpus.words.length elements)
-  const emissionSubMatrix = corpus.emission_matrix.slice(corpus.words.length);
   html += generateStaticMatrix(
-    emissionSubMatrix,
-    corpus.pos.slice(1),
+    corpus.emission_matrix,
+    corpus.pos,
     corpus.words,
-    "emission-answer"
+    "emission-answer",
   );
   html += "</div>";
 
@@ -325,7 +459,7 @@ function showAnswer() {
     corpus.transition_matrix,
     corpus.pos,
     corpus.pos,
-    "transition-answer"
+    "transition-answer",
   );
   html += "</div>";
 
@@ -341,9 +475,14 @@ function showHint() {
   hideAllOutputSections();
 
   let hint = "";
+  const sentence =
+    currentCorpus && currentCorpus.tokens
+      ? currentCorpus.tokens.map((token) => token.word).join(" ")
+      : "";
+
   if (currentCorpusKey === "corpus1") {
     hint = `<div class="markov-hint">
-        <div class="markov-section-title">Hint for: The quick brown fox jumps over the lazy dog in the park.</div>
+        <div class="markov-section-title">Hint for: ${sentence}</div>
         <ul>
           <li>Count how many times each word appears with each POS tag in the sentence.</li>
           <li>For emission: P(word | POS) = count(word, POS) / count(POS) in this sentence.</li>
@@ -353,7 +492,7 @@ function showHint() {
         </div>`;
   } else if (currentCorpusKey === "corpus2") {
     hint = `<div class="markov-hint">
-        <div class="markov-section-title">Hint for: A group of students are reading books quietly in the library.</div>
+        <div class="markov-section-title">Hint for: ${sentence}</div>
         <ul>
           <li>Identify the POS tags for each word in the sentence.</li>
           <li>Emission: For each POS, count the words it generates.</li>
@@ -363,7 +502,7 @@ function showHint() {
         </div>`;
   } else if (currentCorpusKey === "corpus3") {
     hint = `<div class="markov-hint">
-        <div class="markov-section-title">Hint for: During the summer holidays, children play football every evening near the river.</div>
+        <div class="markov-section-title">Hint for: ${sentence}</div>
         <ul>
           <li>Break the sentence into words and assign POS tags.</li>
           <li>Emission: Calculate the probability of each word given its POS.</li>
@@ -447,7 +586,7 @@ function ensureRightPaneContainment() {
 
   // Find all matrix containers within right pane
   const matrixContainers = rightPane.querySelectorAll(
-    ".emission-matrix-container, .transition-matrix-container"
+    ".emission-matrix-container, .transition-matrix-container",
   );
 
   // Ensure each matrix container fits within available space
@@ -509,7 +648,7 @@ function resetMobileTabletStyles() {
 
   const rightPane = document.getElementById("right-pane");
   const matrixContainers = document.querySelectorAll(
-    ".emission-matrix-container, .transition-matrix-container"
+    ".emission-matrix-container, .transition-matrix-container",
   );
 
   // Reset right pane styles for mobile/tablet
